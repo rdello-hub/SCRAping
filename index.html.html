@@ -1,0 +1,2379 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinSpy — Instagram Finance Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+/* =============================================
+   ART DIRECTION: Finance Intelligence Dashboard
+   Palette: Deep navy surfaces, gold accent
+   Typography: DM Serif Display (headers) + Inter (body)
+   Density: Dense — data-first interface
+   ============================================= */
+
+:root {
+  --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+  --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+  --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+  --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem;
+  --space-4: 1rem;    --space-5: 1.25rem; --space-6: 1.5rem;
+  --space-8: 2rem;    --space-10: 2.5rem; --space-12: 3rem;
+  --space-16: 4rem;
+
+  --radius-sm: 0.375rem; --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;  --radius-xl: 1rem; --radius-full: 9999px;
+  --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+
+  --content-narrow: 640px; --content-default: 960px;
+  --content-wide: 1200px;
+
+  --sidebar-width: 220px;
+}
+
+/* ---- DARK PALETTE (default) ---- */
+:root, [data-theme="dark"] {
+  --color-bg:             #0d1117;
+  --color-surface:        #131920;
+  --color-surface-2:      #192230;
+  --color-surface-offset: #0f1822;
+  --color-surface-dynamic: #1e2d3d;
+  --color-divider:        #1e2d3d;
+  --color-border:         oklch(from #c9a84c l c h / 0.18);
+
+  --color-text:           #e8eaf0;
+  --color-text-muted:     #7a8a9e;
+  --color-text-faint:     #3a4a5e;
+  --color-text-inverse:   #0d1117;
+
+  --color-primary:        #c9a84c;
+  --color-primary-hover:  #e0bd6a;
+  --color-primary-active: #a88830;
+  --color-primary-highlight: oklch(from #c9a84c l c h / 0.12);
+
+  --color-success:        #3fb882;
+  --color-success-hover:  #2ea06e;
+  --color-error:          #e05c5c;
+  --color-error-hover:    #c94848;
+  --color-warning:        #e09040;
+
+  --color-blue:           #4a8fd4;
+  --color-purple:         #8b6ddb;
+  --color-teal:           #3ab8b8;
+
+  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.35);
+  --shadow-md: 0 4px 16px oklch(0 0 0 / 0.45);
+  --shadow-lg: 0 12px 40px oklch(0 0 0 / 0.55);
+}
+
+/* ---- LIGHT PALETTE ---- */
+[data-theme="light"] {
+  --color-bg:             #f4f6fa;
+  --color-surface:        #ffffff;
+  --color-surface-2:      #f9fafb;
+  --color-surface-offset: #edf0f5;
+  --color-surface-dynamic: #e5e9f2;
+  --color-divider:        #dde2ec;
+  --color-border:         oklch(from #9a7820 l c h / 0.2);
+
+  --color-text:           #111827;
+  --color-text-muted:     #6b7a8d;
+  --color-text-faint:     #b0bac8;
+  --color-text-inverse:   #ffffff;
+
+  --color-primary:        #9a7820;
+  --color-primary-hover:  #7a5f14;
+  --color-primary-active: #5a460e;
+  --color-primary-highlight: oklch(from #9a7820 l c h / 0.1);
+
+  --color-success:        #1f8a5a;
+  --color-success-hover:  #16734a;
+  --color-error:          #c43232;
+  --color-error-hover:    #a82020;
+  --color-warning:        #b56a10;
+
+  --color-blue:           #1e6db5;
+  --color-purple:         #6242c0;
+  --color-teal:           #1a9090;
+
+  --shadow-sm: 0 1px 3px oklch(0.2 0.02 240 / 0.08);
+  --shadow-md: 0 4px 16px oklch(0.2 0.02 240 / 0.1);
+  --shadow-lg: 0 12px 40px oklch(0.2 0.02 240 / 0.14);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --color-bg: #f4f6fa; --color-surface: #ffffff; --color-surface-2: #f9fafb;
+    --color-surface-offset: #edf0f5; --color-surface-dynamic: #e5e9f2;
+    --color-divider: #dde2ec; --color-border: oklch(from #9a7820 l c h / 0.2);
+    --color-text: #111827; --color-text-muted: #6b7a8d; --color-text-faint: #b0bac8;
+    --color-text-inverse: #ffffff; --color-primary: #9a7820;
+    --color-primary-hover: #7a5f14; --color-primary-active: #5a460e;
+    --color-primary-highlight: oklch(from #9a7820 l c h / 0.1);
+    --color-success: #1f8a5a; --color-error: #c43232; --color-warning: #b56a10;
+    --color-blue: #1e6db5; --color-purple: #6242c0; --color-teal: #1a9090;
+    --shadow-sm: 0 1px 3px oklch(0.2 0.02 240 / 0.08);
+    --shadow-md: 0 4px 16px oklch(0.2 0.02 240 / 0.1);
+    --shadow-lg: 0 12px 40px oklch(0.2 0.02 240 / 0.14);
+  }
+}
+
+/* === BASE === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; scroll-behavior: smooth; }
+body { min-height: 100dvh; font-family: var(--font-body); font-size: var(--text-base); color: var(--color-text); background: var(--color-bg); overflow: hidden; }
+img, svg { display: block; max-width: 100%; }
+ul[role="list"] { list-style: none; }
+input, button, textarea, select { font: inherit; color: inherit; }
+h1,h2,h3,h4 { text-wrap: balance; line-height: 1.2; }
+p, li { text-wrap: pretty; }
+button { cursor: pointer; background: none; border: none; }
+::selection { background: var(--color-primary-highlight); }
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
+a, button, input, select, textarea { transition: color var(--transition-interactive), background var(--transition-interactive), border-color var(--transition-interactive), box-shadow var(--transition-interactive), opacity var(--transition-interactive); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }
+
+/* === LAYOUT === */
+.app-shell { display: grid; grid-template-columns: var(--sidebar-width) 1fr; grid-template-rows: 1fr; height: 100dvh; }
+
+/* === SIDEBAR === */
+.sidebar {
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-divider);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+.sidebar-logo {
+  padding: var(--space-5) var(--space-5) var(--space-4);
+  border-bottom: 1px solid var(--color-divider);
+  display: flex; align-items: center; gap: var(--space-3);
+}
+.sidebar-logo svg { flex-shrink: 0; color: var(--color-primary); }
+.logo-text { display: flex; flex-direction: column; }
+.logo-name { font-family: var(--font-display); font-size: var(--text-lg); color: var(--color-text); letter-spacing: -0.01em; }
+.logo-sub { font-size: var(--text-xs); color: var(--color-text-muted); letter-spacing: 0.05em; text-transform: uppercase; }
+.sidebar-nav { flex: 1; padding: var(--space-3) var(--space-2); overflow-y: auto; }
+.nav-section-label { font-size: var(--text-xs); color: var(--color-text-faint); letter-spacing: 0.08em; text-transform: uppercase; padding: var(--space-4) var(--space-3) var(--space-2); font-weight: 600; }
+.nav-item {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-2) var(--space-3); border-radius: var(--radius-md);
+  color: var(--color-text-muted); font-size: var(--text-sm); font-weight: 500;
+  cursor: pointer; width: 100%; text-align: left;
+  position: relative;
+}
+.nav-item:hover { background: var(--color-surface-dynamic); color: var(--color-text); }
+.nav-item.active { background: var(--color-primary-highlight); color: var(--color-primary); font-weight: 600; }
+.nav-item .nav-icon { flex-shrink: 0; width: 16px; height: 16px; }
+.nav-badge { margin-left: auto; background: var(--color-primary); color: var(--color-text-inverse); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: var(--radius-full); }
+.sidebar-footer {
+  padding: var(--space-4) var(--space-2);
+  border-top: 1px solid var(--color-divider);
+  display: flex; flex-direction: column; gap: var(--space-1);
+}
+
+/* === MAIN CONTENT === */
+.main-area { display: flex; flex-direction: column; overflow: hidden; }
+.topbar {
+  height: 56px; flex-shrink: 0;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-divider);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--space-6);
+  position: sticky; top: 0; z-index: 5;
+}
+.topbar-title { font-size: var(--text-lg); font-weight: 700; color: var(--color-text); }
+.topbar-actions { display: flex; align-items: center; gap: var(--space-3); }
+.content-area { flex: 1; overflow-y: auto; padding: var(--space-6); }
+
+/* === BUTTONS === */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-md);
+  font-size: var(--text-sm); font-weight: 600; white-space: nowrap;
+  transition: background var(--transition-interactive), color var(--transition-interactive), box-shadow var(--transition-interactive);
+}
+.btn-primary { background: var(--color-primary); color: var(--color-bg); }
+.btn-primary:hover { background: var(--color-primary-hover); }
+.btn-secondary { background: var(--color-surface-dynamic); color: var(--color-text); border: 1px solid var(--color-divider); }
+.btn-secondary:hover { background: var(--color-surface-offset); }
+.btn-ghost { color: var(--color-text-muted); padding: var(--space-2); }
+.btn-ghost:hover { color: var(--color-text); background: var(--color-surface-dynamic); }
+.btn-danger { background: var(--color-error); color: #fff; }
+.btn-danger:hover { background: var(--color-error-hover); }
+.btn-sm { padding: var(--space-1) var(--space-3); font-size: var(--text-xs); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn svg { width: 15px; height: 15px; }
+
+/* === CARDS === */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+}
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
+.card-title { font-size: var(--text-sm); font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* === KPI CARDS === */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(200px,100%), 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+.kpi-card { background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-lg); padding: var(--space-5); box-shadow: var(--shadow-sm); }
+.kpi-label { font-size: var(--text-xs); color: var(--color-text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--space-2); display: flex; align-items: center; gap: var(--space-2); }
+.kpi-value { font-size: var(--text-xl); font-weight: 700; color: var(--color-text); font-variant-numeric: tabular-nums; line-height: 1; }
+.kpi-sub { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-1); }
+.kpi-positive { color: var(--color-success); }
+.kpi-negative { color: var(--color-error); }
+
+/* === FORMS === */
+.form-group { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-4); }
+.form-label { font-size: var(--text-sm); font-weight: 600; color: var(--color-text-muted); }
+.form-input {
+  background: var(--color-surface-offset);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  width: 100%;
+}
+.form-input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-highlight); }
+.form-input::placeholder { color: var(--color-text-faint); }
+textarea.form-input { resize: vertical; min-height: 80px; }
+.form-hint { font-size: var(--text-xs); color: var(--color-text-faint); }
+.input-group { display: flex; gap: var(--space-2); }
+.input-group .form-input { flex: 1; }
+
+/* === TAGS / BADGES === */
+.badge {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 2px var(--space-2); border-radius: var(--radius-full);
+  font-size: var(--text-xs); font-weight: 600; white-space: nowrap;
+}
+.badge-gold { background: var(--color-primary-highlight); color: var(--color-primary); }
+.badge-green { background: oklch(from var(--color-success) l c h / 0.15); color: var(--color-success); }
+.badge-red { background: oklch(from var(--color-error) l c h / 0.15); color: var(--color-error); }
+.badge-blue { background: oklch(from var(--color-blue) l c h / 0.15); color: var(--color-blue); }
+.badge-purple { background: oklch(from var(--color-purple) l c h / 0.15); color: var(--color-purple); }
+.badge-teal { background: oklch(from var(--color-teal) l c h / 0.15); color: var(--color-teal); }
+.badge-neutral { background: var(--color-surface-dynamic); color: var(--color-text-muted); }
+.tag-list { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+/* === TABLES === */
+.table-wrap { overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--color-divider); }
+table { border-collapse: collapse; width: 100%; font-size: var(--text-sm); }
+thead tr { background: var(--color-surface-offset); }
+th { padding: var(--space-3) var(--space-4); text-align: left; font-size: var(--text-xs); font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; border-bottom: 1px solid var(--color-divider); }
+td { padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--color-divider); color: var(--color-text); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--color-surface-offset); }
+.th-sort { cursor: pointer; display: flex; align-items: center; gap: var(--space-1); }
+.th-sort:hover { color: var(--color-text); }
+
+/* === DIVIDER === */
+.divider { height: 1px; background: var(--color-divider); margin: var(--space-4) 0; }
+
+/* === TOAST === */
+#toast-container { position: fixed; bottom: var(--space-6); right: var(--space-6); display: flex; flex-direction: column; gap: var(--space-2); z-index: 1000; pointer-events: none; }
+.toast {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-sm);
+  box-shadow: var(--shadow-lg);
+  display: flex; align-items: center; gap: var(--space-3);
+  min-width: 260px; max-width: 380px;
+  animation: toast-in 0.25s cubic-bezier(0.16,1,0.3,1);
+  pointer-events: all;
+}
+.toast.success { border-color: var(--color-success); }
+.toast.error { border-color: var(--color-error); }
+.toast.warning { border-color: var(--color-warning); }
+@keyframes toast-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toast-out { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(12px); } }
+
+/* === MODAL === */
+.modal-backdrop {
+  position: fixed; inset: 0; background: oklch(0 0 0 / 0.6);
+  display: flex; align-items: center; justify-content: center; z-index: 200;
+  backdrop-filter: blur(4px);
+  animation: fade-in 0.15s ease;
+}
+.modal-backdrop.hidden { display: none; }
+.modal {
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  max-width: 520px; width: calc(100% - var(--space-8));
+  max-height: 80dvh; overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: slide-up 0.2s cubic-bezier(0.16,1,0.3,1);
+}
+.modal-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: var(--space-5); }
+.modal-title { font-family: var(--font-display); font-size: var(--text-lg); color: var(--color-text); }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slide-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+/* === PROGRESS BAR === */
+.progress-bar { height: 4px; background: var(--color-surface-dynamic); border-radius: var(--radius-full); overflow: hidden; margin: var(--space-2) 0; }
+.progress-bar-fill { height: 100%; background: var(--color-primary); border-radius: var(--radius-full); transition: width 0.4s ease; }
+
+/* === SKELETON === */
+@keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+.skeleton {
+  background: linear-gradient(90deg, var(--color-surface-offset) 25%, var(--color-surface-dynamic) 50%, var(--color-surface-offset) 75%);
+  background-size: 200% 100%; animation: shimmer 1.5s ease-in-out infinite; border-radius: var(--radius-sm);
+}
+.skeleton-line { height: 1em; margin-bottom: var(--space-2); }
+.skeleton-line.short { width: 50%; }
+.skeleton-heading { height: 1.4em; width: 40%; margin-bottom: var(--space-3); }
+
+/* === EMPTY STATE === */
+.empty-state { display: flex; flex-direction: column; align-items: center; text-align: center; padding: var(--space-16) var(--space-8); color: var(--color-text-muted); }
+.empty-state svg { color: var(--color-text-faint); margin-bottom: var(--space-4); }
+.empty-state h3 { color: var(--color-text); font-size: var(--text-lg); margin-bottom: var(--space-2); }
+.empty-state p { max-width: 36ch; font-size: var(--text-sm); margin-bottom: var(--space-6); }
+
+/* === POST CARD === */
+.post-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex; flex-direction: column; gap: var(--space-3);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-interactive), border-color var(--transition-interactive);
+}
+.post-card:hover { box-shadow: var(--shadow-md); border-color: var(--color-primary); }
+.post-meta { display: flex; align-items: center; gap: var(--space-3); }
+.post-avatar { width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--color-surface-dynamic); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: var(--text-sm); color: var(--color-primary); flex-shrink: 0; }
+.post-username { font-weight: 700; font-size: var(--text-sm); color: var(--color-text); }
+.post-date { font-size: var(--text-xs); color: var(--color-text-muted); }
+.post-caption { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.post-stats { display: flex; gap: var(--space-4); }
+.post-stat { display: flex; align-items: center; gap: var(--space-1); font-size: var(--text-xs); color: var(--color-text-muted); }
+.post-stat svg { width: 12px; height: 12px; }
+.post-actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+/* === ANALYSIS PANEL === */
+.analysis-section { margin-bottom: var(--space-6); }
+.analysis-section h3 { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2); }
+.angle-card { background: var(--color-surface-offset); border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-3); }
+.angle-title { font-weight: 700; font-size: var(--text-sm); color: var(--color-primary); margin-bottom: var(--space-2); }
+.angle-desc { font-size: var(--text-sm); color: var(--color-text-muted); }
+.item-list { display: flex; flex-direction: column; gap: var(--space-2); }
+.item-row { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-3); background: var(--color-surface-offset); border-radius: var(--radius-md); font-size: var(--text-sm); }
+.item-row-icon { flex-shrink: 0; margin-top: 2px; color: var(--color-primary); }
+.item-row-text { color: var(--color-text-muted); }
+
+/* === STATUS INDICATOR === */
+.status-dot { width: 8px; height: 8px; border-radius: var(--radius-full); flex-shrink: 0; }
+.status-dot.green { background: var(--color-success); box-shadow: 0 0 0 3px oklch(from var(--color-success) l c h / 0.2); }
+.status-dot.yellow { background: var(--color-warning); box-shadow: 0 0 0 3px oklch(from var(--color-warning) l c h / 0.2); }
+.status-dot.red { background: var(--color-error); }
+.status-dot.pulse { animation: pulse-dot 1.5s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100%{box-shadow:0 0 0 3px oklch(from var(--color-success) l c h / 0.2)} 50%{box-shadow:0 0 0 6px oklch(from var(--color-success) l c h / 0.05)} }
+
+/* === LOG PANEL === */
+.log-panel { background: var(--color-bg); border: 1px solid var(--color-divider); border-radius: var(--radius-md); padding: var(--space-4); font-family: 'Courier New', monospace; font-size: var(--text-xs); color: var(--color-text-muted); height: 180px; overflow-y: auto; }
+.log-line { margin-bottom: var(--space-1); }
+.log-line.ok { color: var(--color-success); }
+.log-line.err { color: var(--color-error); }
+.log-line.info { color: var(--color-blue); }
+.log-line.warn { color: var(--color-warning); }
+
+/* === PAGES (sections) === */
+.page { display: none; }
+.page.active { display: block; }
+
+/* === THEME TOGGLE === */
+.theme-toggle { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md); color: var(--color-text-muted); }
+.theme-toggle:hover { background: var(--color-surface-dynamic); color: var(--color-text); }
+
+/* === SECTION GRID === */
+.section-grid { display: grid; gap: var(--space-4); }
+.section-grid.col2 { grid-template-columns: 1fr 1fr; }
+.section-grid.col3 { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 1024px) { .section-grid.col3, .section-grid.col2 { grid-template-columns: 1fr; } }
+
+/* === SEARCH BAR === */
+.search-bar { display: flex; align-items: center; gap: var(--space-2); background: var(--color-surface-offset); border: 1px solid var(--color-divider); border-radius: var(--radius-md); padding: var(--space-2) var(--space-3); }
+.search-bar svg { color: var(--color-text-faint); flex-shrink: 0; width: 14px; height: 14px; }
+.search-bar input { background: transparent; border: none; outline: none; font-size: var(--text-sm); color: var(--color-text); flex: 1; }
+.search-bar input::placeholder { color: var(--color-text-faint); }
+
+/* === TOOLBAR === */
+.toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-4); }
+.toolbar-left { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+
+/* === PROFILE CHIP === */
+.profile-chip { display: inline-flex; align-items: center; gap: var(--space-2); background: var(--color-surface-dynamic); border-radius: var(--radius-full); padding: var(--space-1) var(--space-3); font-size: var(--text-xs); color: var(--color-text); }
+.profile-chip button { color: var(--color-text-faint); padding: 0; display: flex; align-items: center; }
+.profile-chip button:hover { color: var(--color-error); }
+.profile-chip button svg { width: 12px; height: 12px; }
+
+/* === REPORT CARD === */
+.report-card { background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-lg); padding: var(--space-5); display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); box-shadow: var(--shadow-sm); }
+.report-info h4 { font-weight: 700; font-size: var(--text-sm); color: var(--color-text); margin-bottom: var(--space-1); }
+.report-info p { font-size: var(--text-xs); color: var(--color-text-muted); }
+.report-actions { display: flex; gap: var(--space-2); flex-shrink: 0; }
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-surface-dynamic); border-radius: var(--radius-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-faint); }
+
+/* === MOBILE === */
+@media (max-width: 768px) {
+  .app-shell { grid-template-columns: 1fr; grid-template-rows: 56px 1fr; }
+  .sidebar { display: none; }
+  .main-area { grid-column: 1; grid-row: 1 / 3; }
+  :root { --sidebar-width: 0px; }
+}
+
+/* === FILTER CHIPS === */
+.filter-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.filter-chip {
+  padding: var(--space-1) var(--space-3); border-radius: var(--radius-full);
+  font-size: var(--text-xs); font-weight: 600; cursor: pointer;
+  background: var(--color-surface-dynamic); color: var(--color-text-muted);
+  border: 1px solid transparent;
+}
+.filter-chip:hover { color: var(--color-text); border-color: var(--color-border); }
+.filter-chip.active { background: var(--color-primary-highlight); color: var(--color-primary); border-color: var(--color-primary); }
+
+/* === TWO-COL SETTINGS === */
+.settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+@media (max-width: 640px) { .settings-grid { grid-template-columns: 1fr; } }
+
+/* === POSTS GRID === */
+.posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px,100%),1fr)); gap: var(--space-4); }
+
+/* === DATA STATS ROW === */
+.stats-row { display: flex; gap: var(--space-6); flex-wrap: wrap; padding: var(--space-4) 0; border-bottom: 1px solid var(--color-divider); margin-bottom: var(--space-4); }
+.stat-item { display: flex; flex-direction: column; }
+.stat-item .val { font-size: var(--text-lg); font-weight: 700; color: var(--color-text); font-variant-numeric: tabular-nums; }
+.stat-item .lbl { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+/* === MISC === */
+.text-primary { color: var(--color-primary); }
+.text-muted { color: var(--color-text-muted); }
+.text-faint { color: var(--color-text-faint); }
+.font-mono { font-family: 'Courier New', monospace; }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+.mb-4 { margin-bottom: var(--space-4); }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.w-full { width: 100%; }
+</style>
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<!-- MODAL: Settings -->
+<div class="modal-backdrop hidden" id="modal-settings" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-settings-title">Configurazione API</h2>
+      <button class="btn btn-ghost" onclick="closeModal('modal-settings')" aria-label="Chiudi"><i data-lucide="x" style="width:18px;height:18px"></i></button>
+    </div>
+    <p class="text-muted" style="font-size:var(--text-sm);margin-bottom:var(--space-5)">Le chiavi vengono salvate nel database locale del browser (IndexedDB). Non vengono mai trasmesse a server esterni tranne le API dei rispettivi servizi.</p>
+    <div class="settings-grid">
+      <div class="form-group">
+        <label class="form-label" for="inp-apify-token">Apify API Token</label>
+        <input type="password" class="form-input" id="inp-apify-token" placeholder="apify_api_...">
+        <span class="form-hint">Gratuito su apify.com</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="inp-openai-token">OpenAI API Key</label>
+        <input type="password" class="form-input" id="inp-openai-token" placeholder="sk-...">
+        <span class="form-hint">Gratuito su platform.openai.com</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="inp-max-posts">Post massimi per profilo (per scraping)</label>
+      <input type="number" class="form-input" id="inp-max-posts" value="50" min="10" max="500">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="inp-openai-model">Modello OpenAI</label>
+      <select class="form-input" id="inp-openai-model">
+        <option value="gpt-4o-mini">gpt-4o-mini (economico, consigliato)</option>
+        <option value="gpt-4o">gpt-4o (più potente)</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:var(--space-3);justify-content:flex-end;margin-top:var(--space-4)">
+      <button class="btn btn-secondary" onclick="closeModal('modal-settings')">Annulla</button>
+      <button class="btn btn-primary" onclick="saveSettings()">Salva impostazioni</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: View Post Detail -->
+<div class="modal-backdrop hidden" id="modal-post" role="dialog" aria-modal="true" aria-labelledby="modal-post-title">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-post-title">Dettaglio Post</h2>
+      <button class="btn btn-ghost" onclick="closeModal('modal-post')" aria-label="Chiudi"><i data-lucide="x" style="width:18px;height:18px"></i></button>
+    </div>
+    <div id="modal-post-content"></div>
+  </div>
+</div>
+
+<!-- MODAL: View Report -->
+<div class="modal-backdrop hidden" id="modal-report" role="dialog" aria-modal="true" aria-labelledby="modal-report-title">
+  <div class="modal" style="max-width:760px;max-height:90dvh">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-report-title">Report</h2>
+      <button class="btn btn-ghost" onclick="closeModal('modal-report')" aria-label="Chiudi"><i data-lucide="x" style="width:18px;height:18px"></i></button>
+    </div>
+    <div id="modal-report-content" style="font-size:var(--text-sm);line-height:1.7;color:var(--color-text-muted)"></div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div class="app-shell">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" aria-label="Navigazione principale">
+    <div class="sidebar-logo">
+      <!-- SVG Logo: stylized candlestick + upward arrow — finance intelligence -->
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-label="FinSpy logo">
+        <rect x="6" y="14" width="5" height="12" rx="1" fill="currentColor" opacity="0.3"/>
+        <rect x="7.5" y="10" width="2" height="4" rx="0.5" fill="currentColor" opacity="0.5"/>
+        <rect x="7.5" y="26" width="2" height="3" rx="0.5" fill="currentColor" opacity="0.5"/>
+        <rect x="14" y="8" width="5" height="12" rx="1" fill="currentColor" opacity="0.6"/>
+        <rect x="15.5" y="4" width="2" height="4" rx="0.5" fill="currentColor"/>
+        <rect x="15.5" y="20" width="2" height="4" rx="0.5" fill="currentColor" opacity="0.5"/>
+        <rect x="22" y="6" width="5" height="8" rx="1" fill="currentColor"/>
+        <rect x="23.5" y="14" width="2" height="4" rx="0.5" fill="currentColor" opacity="0.5"/>
+        <path d="M4 24 L12 16 L18 20 L28 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+        <path d="M25 8 L28 8 L28 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+      </svg>
+      <div class="logo-text">
+        <span class="logo-name">FinSpy</span>
+        <span class="logo-sub">Finance Intel</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav" aria-label="Sezioni">
+      <div class="nav-section-label">Principale</div>
+      <button class="nav-item active" data-page="dashboard" onclick="showPage('dashboard', this)">
+        <i data-lucide="layout-dashboard" class="nav-icon"></i> Dashboard
+      </button>
+      <button class="nav-item" data-page="profili" onclick="showPage('profili', this)">
+        <i data-lucide="users" class="nav-icon"></i> Profili
+        <span class="nav-badge" id="badge-profili">0</span>
+      </button>
+      <button class="nav-item" data-page="scraping" onclick="showPage('scraping', this)">
+        <i data-lucide="refresh-cw" class="nav-icon"></i> Scraping
+      </button>
+      <div class="nav-section-label">Analisi</div>
+      <button class="nav-item" data-page="contenuti" onclick="showPage('contenuti', this)">
+        <i data-lucide="grid-2x2" class="nav-icon"></i> Contenuti
+        <span class="nav-badge" id="badge-contenuti">0</span>
+      </button>
+      <button class="nav-item" data-page="analisi" onclick="showPage('analisi', this)">
+        <i data-lucide="brain" class="nav-icon"></i> Analisi AI
+        <span class="nav-badge" id="badge-analisi">0</span>
+      </button>
+      <button class="nav-item" data-page="tov" onclick="showPage('tov', this)">
+        <i data-lucide="book-open" class="nav-icon"></i> Tone of Voice
+        <span class="nav-badge" id="badge-tov" style="background:var(--color-purple)">0</span>
+      </button>
+      <button class="nav-item" data-page="report" onclick="showPage('report', this)">
+        <i data-lucide="file-text" class="nav-icon"></i> Report
+        <span class="nav-badge" id="badge-report">0</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="nav-item" onclick="openModal('modal-settings')">
+        <i data-lucide="settings" class="nav-icon"></i> Impostazioni API
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-area">
+    <header class="topbar">
+      <h1 class="topbar-title" id="topbar-title">Dashboard</h1>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost theme-toggle" data-theme-toggle aria-label="Cambia tema">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="openModal('modal-settings')">
+          <i data-lucide="key" style="width:14px;height:14px"></i> API Keys
+        </button>
+      </div>
+    </header>
+
+    <main class="content-area" id="content-area" role="main">
+
+      <!-- ==================== DASHBOARD PAGE ==================== -->
+      <section class="page active" id="page-dashboard" aria-label="Dashboard">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label"><i data-lucide="users" style="width:14px;height:14px"></i> Profili monitorati</div>
+            <div class="kpi-value" id="kpi-profili">0</div>
+            <div class="kpi-sub">Aggiungi profili in "Profili"</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label"><i data-lucide="file-image" style="width:14px;height:14px"></i> Post raccolti</div>
+            <div class="kpi-value" id="kpi-posts">0</div>
+            <div class="kpi-sub" id="kpi-posts-sub">Avvia uno scraping</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label"><i data-lucide="brain" style="width:14px;height:14px"></i> Analisi AI</div>
+            <div class="kpi-value" id="kpi-analisi">0</div>
+            <div class="kpi-sub">Genera analisi dai contenuti</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label"><i data-lucide="file-text" style="width:14px;height:14px"></i> Report generati</div>
+            <div class="kpi-value" id="kpi-reports">0</div>
+            <div class="kpi-sub">Esporta in HTML o CSV</div>
+          </div>
+        </div>
+
+        <div class="section-grid col2">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Post recenti</span>
+              <button class="btn btn-ghost btn-sm" onclick="showPage('contenuti', document.querySelector('[data-page=contenuti]'))">Vedi tutti</button>
+            </div>
+            <div id="dash-recent-posts">
+              <div class="empty-state" style="padding:var(--space-8)">
+                <i data-lucide="inbox" style="width:36px;height:36px"></i>
+                <h3 style="font-size:var(--text-sm)">Nessun post</h3>
+                <p>Aggiungi profili e avvia lo scraping</p>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Angoli comunicativi</span>
+              <button class="btn btn-ghost btn-sm" onclick="showPage('analisi', document.querySelector('[data-page=analisi]'))">Vedi analisi</button>
+            </div>
+            <div id="dash-angles">
+              <div class="empty-state" style="padding:var(--space-8)">
+                <i data-lucide="sparkles" style="width:36px;height:36px"></i>
+                <h3 style="font-size:var(--text-sm)">Nessuna analisi</h3>
+                <p>Raccogli post e genera un'analisi AI</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mt-4" id="dash-last-scrape" style="display:none">
+          <div class="card-header">
+            <span class="card-title">Ultimo scraping</span>
+          </div>
+          <div id="dash-last-scrape-content"></div>
+        </div>
+      </section>
+
+      <!-- ==================== PROFILI PAGE ==================== -->
+      <section class="page" id="page-profili" aria-label="Gestione profili">
+        <div class="card mb-4">
+          <div class="card-header" style="margin-bottom:var(--space-3)">
+            <span class="card-title">Aggiungi profili Instagram</span>
+          </div>
+          <p class="text-muted" style="font-size:var(--text-sm);margin-bottom:var(--space-4)">Inserisci gli username dei profili della nicchia finanza/investimenti italiani da monitorare (senza @).</p>
+          <div style="display:flex;gap:var(--space-4);flex-wrap:wrap;align-items:flex-start">
+            <div style="flex:1;min-width:260px">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label" for="inp-username">Username singolo</label>
+                <div class="input-group">
+                  <input type="text" class="form-input" id="inp-username" placeholder="es. iltuoconsulente_fi" onkeydown="if(event.key==='Enter')addProfile()">
+                  <button class="btn btn-primary" onclick="addProfile()"><i data-lucide="plus" style="width:14px;height:14px"></i> Aggiungi</button>
+                </div>
+              </div>
+            </div>
+            <div style="flex:1;min-width:260px">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label" for="inp-bulk">Lista utenti (uno per riga o separati da virgola)</label>
+                <div style="display:flex;gap:var(--space-2)">
+                  <textarea class="form-input" id="inp-bulk" placeholder="utente1&#10;utente2&#10;utente3" rows="3" style="min-height:72px"></textarea>
+                  <button class="btn btn-secondary" style="align-self:flex-end" onclick="addBulkProfiles()"><i data-lucide="upload" style="width:14px;height:14px"></i></button>
+                </div>
+              </div>
+            </div>
+            <div style="flex:0;align-self:flex-end">
+              <label class="btn btn-secondary" style="cursor:pointer" title="Carica CSV con colonna 'username'">
+                <i data-lucide="file-up" style="width:14px;height:14px"></i> CSV
+                <input type="file" accept=".csv,.txt" style="display:none" onchange="loadCSV(event)">
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <span class="card-title">Profili monitorati (<span id="profili-count">0</span>)</span>
+            </div>
+            <div style="display:flex;gap:var(--space-2)">
+              <button class="btn btn-secondary btn-sm" onclick="exportProfilesCSV()"><i data-lucide="download" style="width:12px;height:12px"></i> Esporta CSV</button>
+              <button class="btn btn-danger btn-sm" onclick="clearAllProfiles()"><i data-lucide="trash-2" style="width:12px;height:12px"></i> Svuota</button>
+            </div>
+          </div>
+          <div id="profili-list">
+            <div class="empty-state" style="padding:var(--space-10)">
+              <i data-lucide="user-plus" style="width:36px;height:36px"></i>
+              <h3>Nessun profilo</h3>
+              <p>Aggiungi gli username Instagram da monitorare</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCRAPING PAGE ==================== -->
+      <section class="page" id="page-scraping" aria-label="Scraping Instagram">
+        <div class="section-grid col2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Avvia scraping</span></div>
+            <p class="text-muted" style="font-size:var(--text-sm);margin-bottom:var(--space-4)">Lo scraping raccoglie i post pubblici dei profili monitorati tramite Apify Instagram Scraper. Richiede una API Key Apify valida.</p>
+            <div class="form-group">
+              <label class="form-label">Profili da scrapare</label>
+              <div id="scraping-profile-chips" class="tag-list" style="min-height:40px;padding:var(--space-2);background:var(--color-surface-offset);border-radius:var(--radius-md)">
+                <span class="text-faint" style="font-size:var(--text-xs)">Caricamento profili...</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="scrape-max-posts">Post per profilo</label>
+              <input type="number" class="form-input" id="scrape-max-posts" value="50" min="5" max="500">
+              <span class="form-hint">Min 5, Max 500. Più post = più tempo e crediti Apify.</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Seleziona profili da includere</label>
+              <div id="scraping-checkboxes" style="display:flex;flex-direction:column;gap:var(--space-2);max-height:160px;overflow-y:auto"></div>
+            </div>
+            <button class="btn btn-primary w-full" id="btn-start-scrape" onclick="startScraping()">
+              <i data-lucide="play" style="width:14px;height:14px"></i> Avvia Scraping
+            </button>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Stato</span>
+              <div style="display:flex;align-items:center;gap:var(--space-2)">
+                <div class="status-dot" id="scrape-dot" style="background:var(--color-text-faint)"></div>
+                <span id="scrape-status-text" style="font-size:var(--text-xs);color:var(--color-text-muted)">In attesa</span>
+              </div>
+            </div>
+            <div class="progress-bar" id="scrape-progress-wrap" style="display:none">
+              <div class="progress-bar-fill" id="scrape-progress" style="width:0%"></div>
+            </div>
+            <div id="scrape-stats" style="display:none;margin:var(--space-3) 0">
+              <div class="stats-row" style="padding:var(--space-3) 0;border-bottom:none;gap:var(--space-5)">
+                <div class="stat-item"><span class="val" id="sc-profili">0</span><span class="lbl">Profili</span></div>
+                <div class="stat-item"><span class="val" id="sc-posts">0</span><span class="lbl">Post raccolti</span></div>
+                <div class="stat-item"><span class="val" id="sc-time">-</span><span class="lbl">Tempo</span></div>
+              </div>
+            </div>
+            <div class="log-panel" id="scrape-log"><div class="log-line info">Pronto. Configura le API e avvia lo scraping.</div></div>
+          </div>
+        </div>
+        <div class="card mt-4" id="scrape-history-card">
+          <div class="card-header"><span class="card-title">Cronologia scraping</span></div>
+          <div id="scrape-history">
+            <div class="empty-state" style="padding:var(--space-8)">
+              <i data-lucide="clock" style="width:36px;height:36px"></i>
+              <h3>Nessuno scraping eseguito</h3>
+              <p>L'attività verrà registrata qui</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== CONTENUTI PAGE ==================== -->
+      <section class="page" id="page-contenuti" aria-label="Contenuti raccolti">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="search-bar" style="min-width:220px">
+              <i data-lucide="search"></i>
+              <input type="text" placeholder="Cerca nelle caption..." id="search-posts" oninput="filterPosts()">
+            </div>
+            <select class="form-input" id="filter-user" style="width:auto;min-width:160px" onchange="filterPosts()">
+              <option value="">Tutti i profili</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:var(--space-2)">
+            <button class="btn btn-secondary btn-sm" onclick="exportPostsCSV()"><i data-lucide="download" style="width:12px;height:12px"></i> CSV</button>
+            <button class="btn btn-secondary btn-sm" onclick="exportPostsJSON()"><i data-lucide="code" style="width:12px;height:12px"></i> JSON</button>
+            <button class="btn btn-danger btn-sm" onclick="clearAllPosts()"><i data-lucide="trash-2" style="width:12px;height:12px"></i> Svuota Tutti</button>
+          </div>
+        </div>
+        <div class="filter-chips mb-4" id="sort-chips">
+          <button class="filter-chip active" data-sort="date" onclick="sortPosts('date', this)">Più recenti</button>
+          <button class="filter-chip" data-sort="likes" onclick="sortPosts('likes', this)">Più like</button>
+          <button class="filter-chip" data-sort="comments" onclick="sortPosts('comments', this)">Più commenti</button>
+        </div>
+        <div id="posts-grid" class="posts-grid">
+          <div class="empty-state" style="grid-column:1/-1;padding:var(--space-12)">
+            <i data-lucide="photo" style="width:40px;height:40px"></i>
+            <h3>Nessun contenuto</h3>
+            <p>Avvia uno scraping per raccogliere i post dei profili monitorati</p>
+            <button class="btn btn-primary" onclick="showPage('scraping', document.querySelector('[data-page=scraping]'))">Vai a Scraping</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== ANALISI PAGE ==================== -->
+      <section class="page" id="page-analisi" aria-label="Analisi AI">
+        <div class="section-grid col2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Genera analisi AI</span></div>
+            <p class="text-muted" style="font-size:var(--text-sm);margin-bottom:var(--space-4)">L'AI analizza le caption dei post raccolti ed estrae angoli comunicativi, obiezioni comuni e problemi del target nella nicchia finanza/investimenti.</p>
+            <div class="form-group">
+              <label class="form-label" for="analysis-profile-select">Profilo (lascia vuoto per tutti)</label>
+              <select class="form-input" id="analysis-profile-select">
+                <option value="">Tutti i profili</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="analysis-max-posts">Max post da analizzare</label>
+              <input type="number" class="form-input" id="analysis-max-posts" value="30" min="5" max="200">
+              <span class="form-hint">Più post = analisi più ricca ma più token OpenAI utilizzati</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="analysis-title">Nome analisi</label>
+              <input type="text" class="form-input" id="analysis-title" placeholder="es. Analisi aprile 2026">
+            </div>
+            <button class="btn btn-primary w-full" id="btn-run-analysis" onclick="runAnalysis()">
+              <i data-lucide="sparkles" style="width:14px;height:14px"></i> Genera analisi
+            </button>
+            <div id="analysis-progress" style="display:none;margin-top:var(--space-4)">
+              <div class="progress-bar"><div class="progress-bar-fill" id="analysis-progress-bar" style="width:0%"></div></div>
+              <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-2)" id="analysis-status-msg">Elaborazione...</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Analisi disponibili</span></div>
+            <div id="analysis-list" style="display:flex;flex-direction:column;gap:var(--space-3)">
+              <div class="empty-state" style="padding:var(--space-8)">
+                <i data-lucide="brain" style="width:36px;height:36px"></i>
+                <h3>Nessuna analisi</h3>
+                <p>Genera la prima analisi dei contenuti</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="analysis-detail" style="display:none" class="mt-4">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title" id="analysis-detail-title">Risultati analisi</span>
+              <div style="display:flex;gap:var(--space-2)">
+                <button class="btn btn-secondary btn-sm" onclick="generateReport()"><i data-lucide="file-text" style="width:12px;height:12px"></i> Genera report</button>
+                <button class="btn btn-ghost btn-sm" onclick="document.getElementById('analysis-detail').style.display='none'"><i data-lucide="x" style="width:12px;height:12px"></i></button>
+              </div>
+            </div>
+            <div id="analysis-detail-content"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TONE OF VOICE PAGE ==================== -->
+      <section class="page" id="page-tov" aria-label="Tone of Voice">
+        <div class="section-grid col2">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Aggiungi materiale ToV</span></div>
+            <p class="text-muted" style="font-size:var(--text-sm);margin-bottom:var(--space-4)">Incolla qui script, post, email o newsletter che hai scritto in passato. La dashboard studierà il tuo stile per scrivere i nuovi contenuti.</p>
+            <div class="form-group" style="margin-bottom:var(--space-3)">
+              <label class="form-label" for="tov-title">Nome del documento</label>
+              <input type="text" class="form-input" id="tov-title" placeholder="es. Script Reel Vendita">
+            </div>
+            <div class="form-group" style="margin-bottom:var(--space-3)">
+              <label class="form-label">Carica File (Opzionale)</label>
+              <input type="file" id="tov-file" accept=".txt,.pdf,.doc,.docx" class="form-input" onchange="handleTovFileUpload(event)" style="cursor:pointer;padding:var(--space-2)">
+              <div style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-1)">Supporta PDF, Word (.docx) o Testo (.txt). Il testo verrà estratto qui sotto come bozza.</div>
+            </div>
+            <div class="form-group" style="margin-bottom:var(--space-4)">
+              <label class="form-label" for="tov-content">Contenuto testuale</label>
+              <textarea class="form-input" id="tov-content" rows="8" placeholder="Incolla qui tutto il testo del tuo contenuto..."></textarea>
+            </div>
+            <button class="btn btn-primary w-full" onclick="addTovDoc()">
+              <i data-lucide="save" style="width:14px;height:14px"></i> Salva nel Database ToV
+            </button>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Documenti archiviati</span></div>
+            <div id="tov-list" style="display:flex;flex-direction:column;gap:var(--space-3)">
+              <div class="empty-state" style="padding:var(--space-8)">
+                <i data-lucide="book" style="width:36px;height:36px"></i>
+                <h3>Nessun documento</h3>
+                <p>Aggiungi esempi di scrittura dal form affianco.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== REPORT PAGE ==================== -->
+      <section class="page" id="page-report" aria-label="Report">
+        <div class="card mb-4">
+          <div class="card-header"><span class="card-title">Genera report personalizzato</span></div>
+          <p class="text-muted" style="font-size:var(--text-sm);margin-bottom:var(--space-4)">Crea un report completo che include post top, angoli comunicativi, obiezioni e problemi del target. Scaricabile come file HTML autonomo.</p>
+          <div class="settings-grid">
+            <div class="form-group">
+              <label class="form-label" for="report-title-inp">Titolo report</label>
+              <input type="text" class="form-input" id="report-title-inp" placeholder="es. Analisi nicchia finanza - Aprile 2026">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="report-analysis-select">Includi analisi AI</label>
+              <select class="form-input" id="report-analysis-select">
+                <option value="">Nessuna analisi</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:var(--space-3);flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="generateCustomReport()"><i data-lucide="file-plus" style="width:14px;height:14px"></i> Genera e scarica HTML</button>
+            <button class="btn btn-secondary" onclick="exportAllDataJSON()"><i data-lucide="database" style="width:14px;height:14px"></i> Backup dati (JSON)</button>
+            <label class="btn btn-secondary" style="cursor:pointer">
+              <i data-lucide="upload" style="width:14px;height:14px"></i> Ripristina backup
+              <input type="file" accept=".json" style="display:none" onchange="importDataJSON(event)">
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Report salvati (<span id="report-count">0</span>)</span>
+          </div>
+          <div id="report-list" style="display:flex;flex-direction:column;gap:var(--space-3)">
+            <div class="empty-state" style="padding:var(--space-10)">
+              <i data-lucide="file-text" style="width:36px;height:36px"></i>
+              <h3>Nessun report</h3>
+              <p>Genera il primo report dalla sezione sopra o dall'analisi AI</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.12.0/mammoth.browser.min.js"></script>
+<script>
+if (window.pdfjsLib) {
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+}
+
+// ============================================================
+// FINSPY — CORE JS
+// Persistence: IndexedDB  |  API: Apify + OpenAI
+// ============================================================
+
+// --- STATE ---
+let DB = null;
+let state = {
+  profiles: [],      // [{id, username, addedAt, postCount}]
+  posts: [],         // [{id, username, caption, likesCount, commentsCount, timestamp, url, type}]
+  analyses: [],      // [{id, title, createdAt, profile, postIds, angles, objections, problems, rawText}]
+  reports: [],       // [{id, title, createdAt, html}]
+  tov: [],           // [{id, title, content, createdAt}]
+  settings: { apifyToken: '', openaiToken: '', maxPosts: 50, model: 'gpt-4o-mini' },
+  scrapeLogs: [],
+  scrapeHistory: [],
+  currentAnalysisId: null
+};
+
+// --- PATCH LUCIDE ---
+const _origLucide = window.lucide && window.lucide.createIcons;
+if (_origLucide) {
+  window.lucide.createIcons = (opts) => {
+    clearTimeout(window._lucideTimer);
+    window._lucideTimer = setTimeout(() => { try { _origLucide(); } catch(e){} }, 50);
+  };
+}
+
+// --- INDEXEDDB ---
+function initDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('FinSpyDB', 2);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('store')) {
+        db.createObjectStore('store');
+      }
+    };
+    req.onsuccess = e => { DB = e.target.result; resolve(); };
+    req.onerror = () => reject(req.error);
+  });
+}
+function dbGet(key) {
+  return new Promise((res, rej) => {
+    const tx = DB.transaction('store', 'readonly');
+    const req = tx.objectStore('store').get(key);
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+function dbSet(key, value) {
+  return new Promise((res, rej) => {
+    const tx = DB.transaction('store', 'readwrite');
+    tx.objectStore('store').put(value, key);
+    tx.oncomplete = () => res();
+    tx.onerror = () => rej(tx.error);
+  });
+}
+async function saveState() {
+  await dbSet('profiles', state.profiles);
+  await dbSet('posts', state.posts);
+  await dbSet('analyses', state.analyses);
+  await dbSet('reports', state.reports);
+  await dbSet('scrapeHistory', state.scrapeHistory);
+  await dbSet('tov', state.tov);
+}
+async function saveSettings() {
+  state.settings.apifyToken = document.getElementById('inp-apify-token').value.trim();
+  state.settings.openaiToken = document.getElementById('inp-openai-token').value.trim();
+  state.settings.maxPosts = parseInt(document.getElementById('inp-max-posts').value) || 50;
+  state.settings.model = document.getElementById('inp-openai-model').value;
+  await dbSet('settings', state.settings);
+  closeModal('modal-settings');
+  toast('Impostazioni salvate', 'success');
+}
+async function loadState() {
+  const [profiles, posts, analyses, reports, settings, history, tov] = await Promise.all([
+    dbGet('profiles'), dbGet('posts'), dbGet('analyses'),
+    dbGet('reports'), dbGet('settings'), dbGet('scrapeHistory'), dbGet('tov')
+  ]);
+  if (profiles) state.profiles = profiles;
+  if (posts) state.posts = posts;
+  if (analyses) state.analyses = analyses;
+  if (reports) state.reports = reports;
+  if (settings) state.settings = { ...state.settings, ...settings };
+  if (history) state.scrapeHistory = history;
+  if (tov) state.tov = tov || [];
+}
+
+// --- THEME ---
+(function(){
+  const r = document.documentElement;
+  const d = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  r.setAttribute('data-theme', d);
+  const t = document.querySelector('[data-theme-toggle]');
+  if (t) {
+    updateThemeIcon(t, d);
+    t.addEventListener('click', () => {
+      const cur = r.getAttribute('data-theme');
+      const next = cur === 'dark' ? 'light' : 'dark';
+      r.setAttribute('data-theme', next);
+      updateThemeIcon(t, next);
+    });
+  }
+})();
+function updateThemeIcon(btn, theme) {
+  btn.innerHTML = theme === 'dark'
+    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+}
+
+// --- NAVIGATION ---
+const pageTitles = { dashboard: 'Dashboard', profili: 'Profili Instagram', scraping: 'Scraping', contenuti: 'Contenuti raccolti', analisi: 'Analisi AI', report: 'Report' };
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  if (btn) btn.classList.add('active');
+  document.getElementById('topbar-title').textContent = pageTitles[id] || id;
+  if (id === 'scraping') refreshScrapingProfiles();
+  if (id === 'analisi') refreshAnalysisSelects();
+  if (id === 'report') refreshReportPage();
+  if (id === 'contenuti') renderPosts();
+  if (id === 'dashboard') renderDashboard();
+}
+
+// --- TOAST ---
+function toast(msg, type = 'info', duration = 3000) {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  const icons = { success: 'check-circle', error: 'x-circle', warning: 'alert-triangle', info: 'info' };
+  const colors = { success: 'var(--color-success)', error: 'var(--color-error)', warning: 'var(--color-warning)', info: 'var(--color-blue)' };
+  t.innerHTML = `<i data-lucide="${icons[type]||'info'}" style="width:16px;height:16px;color:${colors[type]};flex-shrink:0"></i><span>${msg}</span>`;
+  c.appendChild(t);
+  lucide.createIcons({ nodes: [t] });
+  setTimeout(() => { t.style.animation = 'toast-out 0.25s ease forwards'; setTimeout(() => t.remove(), 250); }, duration);
+}
+
+// --- MODALS ---
+function openModal(id) {
+  const m = document.getElementById(id);
+  m.classList.remove('hidden');
+  if (id === 'modal-settings') {
+    document.getElementById('inp-apify-token').value = state.settings.apifyToken;
+    document.getElementById('inp-openai-token').value = state.settings.openaiToken;
+    document.getElementById('inp-max-posts').value = state.settings.maxPosts;
+    document.getElementById('inp-openai-model').value = state.settings.model;
+  }
+  m.addEventListener('click', e => { if (e.target === m) closeModal(id); }, { once: true });
+}
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+// --- PROFILES ---
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+function addProfile() {
+  const inp = document.getElementById('inp-username');
+  let rawUser = inp.value.trim();
+  const username = rawUser.split('?')[0].replace(/\/$/, '').split('/').pop().replace(/^@/, '').toLowerCase();
+  if (!username) return;
+  if (state.profiles.some(p => p.username === username)) { toast('Profilo già presente', 'warning'); return; }
+  state.profiles.push({ id: genId(), username, addedAt: new Date().toISOString(), postCount: 0 });
+  inp.value = '';
+  saveState();
+  refreshAll();
+  toast(`@${username} aggiunto`, 'success');
+}
+
+function addBulkProfiles() {
+  const bulk = document.getElementById('inp-bulk').value;
+  const usernames = bulk.split(/[\n,;]+/).map(u => u.trim().split('?')[0].replace(/\/$/, '').split('/').pop().replace(/^@/, '').toLowerCase()).filter(Boolean);
+  let added = 0;
+  usernames.forEach(username => {
+    if (!username) return;
+    if (!state.profiles.some(p => p.username === username)) {
+      state.profiles.push({ id: genId(), username, addedAt: new Date().toISOString(), postCount: 0 });
+      added++;
+    }
+  });
+  document.getElementById('inp-bulk').value = '';
+  saveState();
+  refreshAll();
+  toast(`${added} profili aggiunti`, 'success');
+}
+
+function loadCSV(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const text = e.target.result;
+    const lines = text.split('\n');
+    let colIdx = 0;
+    // detect header
+    if (lines[0]) {
+      const headers = lines[0].split(',');
+      const ui = headers.findIndex(h => h.trim().toLowerCase() === 'username');
+      if (ui >= 0) colIdx = ui;
+    }
+    let added = 0;
+    lines.forEach((line, i) => {
+      if (i === 0 && line.toLowerCase().includes('username')) return;
+      const parts = line.split(',');
+      const username = (parts[colIdx] || '').trim().split('?')[0].replace(/\/$/, '').split('/').pop().replace(/^@/, '').toLowerCase();
+      if (!username) return;
+      if (!state.profiles.some(p => p.username === username)) {
+        state.profiles.push({ id: genId(), username, addedAt: new Date().toISOString(), postCount: 0 });
+        added++;
+      }
+    });
+    saveState();
+    refreshAll();
+    toast(`${added} profili caricati da CSV`, 'success');
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function removeProfile(id) {
+  state.profiles = state.profiles.filter(p => p.id !== id);
+  saveState();
+  refreshAll();
+}
+
+function clearAllProfiles() {
+  if (!confirm('Rimuovere tutti i profili?')) return;
+  state.profiles = [];
+  saveState();
+  refreshAll();
+}
+
+function clearAllPosts() {
+  if (!confirm("Eliminare tutto il database dei post raccolti? L'operazione è irreversibile e ti permetterà di estrarli da capo.")) return;
+  state.posts = [];
+  saveState();
+  refreshAll();
+  toast('Tutti i contenuti sono stati eliminati', 'success');
+}
+
+function renderProfiles() {
+  const container = document.getElementById('profili-list');
+  const count = state.profiles.length;
+  document.getElementById('profili-count').textContent = count;
+  document.getElementById('badge-profili').textContent = count;
+  updateKPIs();
+
+  if (count === 0) {
+    container.innerHTML = `<div class="empty-state" style="padding:var(--space-10)">
+      <i data-lucide="user-plus" style="width:36px;height:36px"></i>
+      <h3>Nessun profilo</h3><p>Aggiungi gli username Instagram da monitorare</p></div>`;
+    lucide.createIcons({ nodes: [container] });
+    return;
+  }
+
+  container.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Username</th><th>Aggiunto</th><th>Post raccolti</th><th>Ultimo scraping</th><th></th></tr></thead>
+    <tbody>${state.profiles.map(p => {
+      const posts = state.posts.filter(x => x.username === p.username).length;
+      const lastPost = state.posts.filter(x => x.username === p.username).sort((a,b) => new Date(b.timestamp)-new Date(a.timestamp))[0];
+      return `<tr>
+        <td><a href="https://instagram.com/${p.username}" target="_blank" rel="noopener noreferrer" style="color:var(--color-primary);text-decoration:none;font-weight:600">@${p.username}</a></td>
+        <td style="color:var(--color-text-muted)">${fmtDate(p.addedAt)}</td>
+        <td><span class="badge badge-${posts>0?'green':'neutral'}">${posts}</span></td>
+        <td style="color:var(--color-text-muted)">${lastPost ? fmtDate(lastPost.timestamp) : '—'}</td>
+        <td style="text-align:right"><button class="btn btn-ghost btn-sm" onclick="removeProfile('${p.id}')" aria-label="Rimuovi"><i data-lucide="trash-2" style="width:13px;height:13px;color:var(--color-error)"></i></button></td>
+      </tr>`;
+    }).join('')}</tbody></table></div>`;
+  lucide.createIcons({ nodes: [container] });
+}
+
+function exportProfilesCSV() {
+  const csv = ['username,addedAt\n', ...state.profiles.map(p => `${p.username},${p.addedAt}\n`)].join('');
+  downloadText(csv, 'profili_finspy.csv', 'text/csv');
+}
+
+// --- SCRAPING ---
+function refreshScrapingProfiles() {
+  const checkboxes = document.getElementById('scraping-checkboxes');
+  const chips = document.getElementById('scraping-profile-chips');
+  if (state.profiles.length === 0) {
+    chips.innerHTML = '<span class="text-faint" style="font-size:var(--text-xs)">Nessun profilo configurato</span>';
+    checkboxes.innerHTML = '<span class="text-faint" style="font-size:var(--text-xs)">Aggiungi profili nella sezione Profili</span>';
+    return;
+  }
+  chips.innerHTML = state.profiles.map(p => `<span class="profile-chip">@${p.username}</span>`).join('');
+  checkboxes.innerHTML = state.profiles.map(p =>
+    `<label style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);cursor:pointer">
+      <input type="checkbox" value="${p.username}" checked style="accent-color:var(--color-primary)">
+      <span>@${p.username}</span>
+    </label>`).join('');
+}
+
+async function startScraping() {
+  const token = state.settings.apifyToken;
+  if (!token) { openModal('modal-settings'); toast('Inserisci prima la API Key di Apify', 'warning'); return; }
+  const checked = [...document.querySelectorAll('#scraping-checkboxes input:checked')].map(i => i.value);
+  if (checked.length === 0) { toast('Seleziona almeno un profilo', 'warning'); return; }
+  const maxPosts = parseInt(document.getElementById('scrape-max-posts').value) || 50;
+
+  const btn = document.getElementById('btn-start-scrape');
+  btn.disabled = true; btn.innerHTML = '<i data-lucide="loader" style="width:14px;height:14px"></i> Scraping in corso...';
+  lucide.createIcons({ nodes: [btn] });
+
+  setScrapeDot('yellow', 'In corso...');
+  document.getElementById('scrape-progress-wrap').style.display = 'block';
+  document.getElementById('scrape-stats').style.display = 'block';
+  logScrape('info', `Avvio scraping per ${checked.length} profili — max ${maxPosts} post ciascuno`);
+
+  const startTime = Date.now();
+  let totalPosts = 0;
+  const errors = [];
+
+  for (let i = 0; i < checked.length; i++) {
+    const username = checked[i];
+    const pct = Math.round(((i) / checked.length) * 100);
+    setProgress(pct);
+    document.getElementById('sc-profili').textContent = `${i+1}/${checked.length}`;
+    logScrape('info', `Scraping @${username}...`);
+
+    try {
+      const posts = await scrapeProfile(token, username, maxPosts);
+      const newOrNeedsVision = [];
+      posts.forEach(post => {
+        const existingIdx = state.posts.findIndex(p => p.id === post.id);
+        if (existingIdx === -1) {
+          state.posts.push(post);
+          newOrNeedsVision.push(post);
+          totalPosts++;
+        } else {
+          // Update mutable data
+          state.posts[existingIdx].likesCount = post.likesCount;
+          state.posts[existingIdx].commentsCount = post.commentsCount;
+          state.posts[existingIdx].comments = post.comments;
+          state.posts[existingIdx].childPosts = post.childPosts;
+          
+          if (!state.posts[existingIdx].visualContext) {
+            newOrNeedsVision.push(state.posts[existingIdx]);
+          }
+        }
+      });
+      logScrape('info', `@${username}: Estrazione testi completa. Avvio analisi visiva su ${newOrNeedsVision.length} post...`);
+      await analyzePostImages(newOrNeedsVision, state.settings.openaiToken, state.settings.model);
+      const prof = state.profiles.find(p => p.username === username);
+      if (prof) { prof.postCount = state.posts.filter(p => p.username === username).length; prof.lastScraped = new Date().toISOString(); }
+      document.getElementById('sc-posts').textContent = state.posts.length;
+      logScrape('ok', `@${username}: ${posts.length} post raccolti`);
+    } catch(err) {
+      errors.push(username);
+      logScrape('err', `@${username}: ${err.message}`);
+    }
+  }
+
+  setProgress(100);
+  const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+  document.getElementById('sc-time').textContent = elapsed + 's';
+  setScrapeDot(errors.length === 0 ? 'green' : 'yellow', errors.length === 0 ? 'Completato' : `Completato con ${errors.length} errori`);
+  logScrape('ok', `Scraping completato — ${totalPosts} nuovi post in ${elapsed}s`);
+
+  const histEntry = {
+    id: genId(), date: new Date().toISOString(), profiles: checked, newPosts: totalPosts,
+    totalPosts: state.posts.length, errors, elapsed
+  };
+  state.scrapeHistory.unshift(histEntry);
+  if (state.scrapeHistory.length > 20) state.scrapeHistory.pop();
+
+  await saveState();
+  updateKPIs();
+  renderScrapeHistory();
+  renderDashboard();
+  updateFilterSelects();
+
+  btn.disabled = false; btn.innerHTML = '<i data-lucide="play" style="width:14px;height:14px"></i> Avvia Scraping';
+  lucide.createIcons({ nodes: [btn] });
+  toast(`Scraping completato: ${totalPosts} nuovi post`, 'success');
+}
+
+async function scrapeProfile(apifyToken, username, maxPosts) {
+  // Start Apify Instagram Post Scraper actor
+  const runResp = await fetch('https://api.apify.com/v2/acts/apify~instagram-post-scraper/runs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apifyToken}` },
+    body: JSON.stringify({
+      username: [username],
+      resultsLimit: maxPosts,
+      addParentData: false
+    })
+  });
+  if (!runResp.ok) {
+    const err = await runResp.json().catch(() => ({}));
+    throw new Error(err.error?.message || `HTTP ${runResp.status}`);
+  }
+  const runData = await runResp.json();
+  const runId = runData.data?.id;
+  if (!runId) throw new Error('Nessun runId ricevuto da Apify');
+
+  // Poll until finished
+  logScrape('info', `@${username}: job avviato (${runId}), in attesa...`);
+  for (let attempt = 0; attempt < 60; attempt++) {
+    await sleep(3000);
+    const statusResp = await fetch(`https://api.apify.com/v2/actor-runs/${runId}?token=${apifyToken}`);
+    const statusData = await statusResp.json();
+    const status = statusData.data?.status;
+    if (status === 'SUCCEEDED') break;
+    if (status === 'FAILED' || status === 'ABORTED') throw new Error(`Job Apify ${status}`);
+    logScrape('info', `@${username}: ${status}...`);
+  }
+
+  // Fetch dataset
+  const dataResp = await fetch(`https://api.apify.com/v2/actor-runs/${runId}/dataset/items?token=${apifyToken}&limit=${maxPosts}`);
+  const items = await dataResp.json();
+
+  return (Array.isArray(items) ? items : (items.items || [])).map(item => ({
+    id: item.id || item.shortCode || genId(),
+    username,
+    caption: item.caption || '',
+    likesCount: item.likesCount || item.likes || 0,
+    commentsCount: item.commentsCount || item.comments || 0,
+    timestamp: item.timestamp || item.taken_at_timestamp || new Date().toISOString(),
+    url: item.url || `https://instagram.com/p/${item.shortCode || ''}`,
+    type: item.type || 'Image',
+    hashtags: item.hashtags || [],
+    displayUrl: item.displayUrl || '',
+    childPosts: (item.childPosts || []).map(c => c.displayUrl).filter(Boolean),
+    comments: (item.latestComments || []).map(c => c.text).filter(Boolean)
+  }));
+}
+
+async function analyzePostImages(posts, token, model) {
+  if (!token) return;
+  for (const post of posts) {
+     if (post.visualContext || !post.displayUrl) continue;
+     try {
+       const contentArray = [
+         { type: 'text', text: "Descrivi brevissimamente (max 2-3 frasi) il contenuto visivo di questo post Instagram finanziario e trascrivi eventuali testi o titoli grafici presenti. Se ci sono più immagini (carosello), fai una sintesi dei titoli testuali o pattern grafici delle varie slide." },
+         { type: 'image_url', image_url: { url: post.displayUrl } }
+       ];
+       
+       if (post.childPosts && post.childPosts.length > 0) {
+         // Analizziamo max altre 3 slide del carosello per evitare limiti Rate Limit di OpenAI
+         const extraImages = post.childPosts.slice(1, 4);
+         extraImages.forEach(imgUrl => {
+           contentArray.push({ type: 'image_url', image_url: { url: imgUrl } });
+         });
+       }
+
+       const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+         body: JSON.stringify({
+           model: model || 'gpt-4o-mini',
+           messages: [{ role: 'user', content: contentArray }],
+           max_tokens: 250
+         })
+       });
+       if (resp.ok) {
+         const data = await resp.json();
+         post.visualContext = data.choices[0].message.content;
+       }
+     } catch (e) {
+       console.error("Errore Vision AI", e);
+     }
+  }
+}
+
+function setScrapeDot(color, text) {
+  const dot = document.getElementById('scrape-dot');
+  dot.className = `status-dot ${color}`;
+  if (color === 'green') dot.classList.add('pulse');
+  document.getElementById('scrape-status-text').textContent = text;
+}
+
+function setProgress(pct) {
+  document.getElementById('scrape-progress').style.width = pct + '%';
+}
+
+function logScrape(type, msg) {
+  const log = document.getElementById('scrape-log');
+  const line = document.createElement('div');
+  line.className = `log-line ${type}`;
+  const time = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  line.textContent = `[${time}] ${msg}`;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+  state.scrapeLogs.push({ type, msg, time });
+}
+
+function renderScrapeHistory() {
+  const container = document.getElementById('scrape-history');
+  if (state.scrapeHistory.length === 0) {
+    container.innerHTML = `<div class="empty-state" style="padding:var(--space-8)">
+      <i data-lucide="clock" style="width:36px;height:36px"></i>
+      <h3>Nessuno scraping eseguito</h3><p>L'attività verrà registrata qui</p></div>`;
+    lucide.createIcons({ nodes: [container] });
+    return;
+  }
+  container.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Data</th><th>Profili</th><th>Nuovi post</th><th>Totale DB</th><th>Tempo</th><th>Stato</th></tr></thead>
+    <tbody>${state.scrapeHistory.map(h => `<tr>
+      <td style="color:var(--color-text-muted)">${fmtDate(h.date)}</td>
+      <td>${h.profiles.map(p => `<span class="badge badge-neutral">@${p}</span>`).join(' ')}</td>
+      <td><strong>+${h.newPosts}</strong></td>
+      <td>${h.totalPosts}</td>
+      <td style="color:var(--color-text-muted)">${h.elapsed}s</td>
+      <td>${h.errors.length === 0 ? '<span class="badge badge-green">OK</span>' : `<span class="badge badge-red">${h.errors.length} err</span>`}</td>
+    </tr>`).join('')}</tbody></table></div>`;
+  lucide.createIcons({ nodes: [container] });
+}
+
+// --- TONE OF VOICE ---
+function renderTovList() {
+  const container = document.getElementById('tov-list');
+  const count = state.tov.length;
+  document.getElementById('badge-tov').textContent = count;
+  if (count === 0) {
+    container.innerHTML = `<div class="empty-state" style="padding:var(--space-8)"><i data-lucide="book" style="width:36px;height:36px"></i><h3>Nessun documento</h3><p>Aggiungi esempi di scrittura dal form affianco.</p></div>`;
+    lucide.createIcons({ nodes: [container] });
+    return;
+  }
+  container.innerHTML = state.tov.map(t => `
+    <div style="background:var(--color-surface-offset);border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:var(--space-4);display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-3)">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:var(--text-sm);color:var(--color-primary);margin-bottom:var(--space-1)">${escHtml(t.title)}</div>
+        <div style="font-size:var(--text-xs);color:var(--color-text-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${escHtml(t.content)}</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="deleteTovDoc('${t.id}')" aria-label="Elimina"><i data-lucide="trash-2" style="width:14px;height:14px;color:var(--color-error)"></i></button>
+    </div>
+  `).join('');
+  lucide.createIcons({ nodes: [container] });
+}
+
+async function handleTovFileUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const contentInp = document.getElementById('tov-content');
+  const titleInp = document.getElementById('tov-title');
+  
+  if (!titleInp.value) {
+    titleInp.value = file.name.replace(/\.[^/.]+$/, "");
+  }
+
+  const fileExt = file.name.split('.').pop().toLowerCase();
+  
+  try {
+    toast('Estrazione testo in corso...', 'info', 2000);
+    contentInp.value = 'Estrazione in corso... attendere.';
+    
+    if (fileExt === 'txt') {
+      const text = await file.text();
+      contentInp.value = text;
+    } 
+    else if (fileExt === 'docx' || fileExt === 'doc') {
+      const arrayBuffer = await file.arrayBuffer();
+      const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+      contentInp.value = result.value;
+    }
+    else if (fileExt === 'pdf') {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+      let fullText = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items.map(item => item.str).join(' ');
+        fullText += pageText + "\n\n";
+      }
+      contentInp.value = fullText.trim();
+    } 
+    else {
+      contentInp.value = '';
+      toast('Formato file non supportato. Usa PDF, DOCX o TXT.', 'error');
+    }
+  } catch(err) {
+    console.error(err);
+    contentInp.value = '';
+    toast("Si è verificato un errore durante l'estrazione del testo.", 'error');
+  }
+  
+  event.target.value = ''; // reseta l'input
+}
+
+function addTovDoc() {
+  const titleInp = document.getElementById('tov-title');
+  const contentInp = document.getElementById('tov-content');
+  const title = titleInp.value.trim() || `Documento ${fmtDate(new Date().toISOString())}`;
+  const content = contentInp.value.trim();
+  if (!content) { toast('Inserisci del contenuto testuale', 'warning'); return; }
+  
+  state.tov.unshift({ id: genId(), title, content, createdAt: new Date().toISOString() });
+  saveState();
+  renderTovList();
+  titleInp.value = '';
+  contentInp.value = '';
+  toast("Documento aggiunto! Verrà studiato dall'AI.", 'success');
+}
+
+function deleteTovDoc(id) {
+  if (!confirm('Eliminare questo documento ToV?')) return;
+  state.tov = state.tov.filter(t => t.id !== id);
+  saveState();
+  renderTovList();
+  toast('Documento eliminato', 'success');
+}
+
+// --- POSTS / CONTENUTI ---
+let postsSort = 'date';
+let postsFilter = '';
+let postsUserFilter = '';
+
+function updateFilterSelects() {
+  const users = [...new Set(state.posts.map(p => p.username))].sort();
+  const filterUser = document.getElementById('filter-user');
+  const analysisSelect = document.getElementById('analysis-profile-select');
+  const reportSelect = document.getElementById('report-analysis-select');
+
+  filterUser.innerHTML = '<option value="">Tutti i profili</option>' + users.map(u => `<option value="${u}">@${u}</option>`).join('');
+  analysisSelect.innerHTML = '<option value="">Tutti i profili</option>' + users.map(u => `<option value="${u}">@${u}</option>`).join('');
+}
+
+function filterPosts() {
+  postsFilter = document.getElementById('search-posts').value.toLowerCase();
+  postsUserFilter = document.getElementById('filter-user').value;
+  renderPosts();
+}
+
+function sortPosts(sort, btn) {
+  postsSort = sort;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderPosts();
+}
+
+function renderPosts() {
+  const grid = document.getElementById('posts-grid');
+  let posts = [...state.posts];
+  if (postsUserFilter) posts = posts.filter(p => p.username === postsUserFilter);
+  if (postsFilter) posts = posts.filter(p => p.caption.toLowerCase().includes(postsFilter));
+  if (postsSort === 'likes') posts.sort((a,b) => b.likesCount - a.likesCount);
+  else if (postsSort === 'comments') posts.sort((a,b) => b.commentsCount - a.commentsCount);
+  else posts.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  document.getElementById('badge-contenuti').textContent = state.posts.length;
+
+  if (posts.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;padding:var(--space-12)">
+      <i data-lucide="photo" style="width:40px;height:40px"></i>
+      <h3>Nessun contenuto</h3>
+      <p>${state.posts.length === 0 ? 'Avvia uno scraping per raccogliere i post' : 'Nessun risultato per i filtri selezionati'}</p>
+      ${state.posts.length === 0 ? `<button class="btn btn-primary" onclick="showPage('scraping', document.querySelector('[data-page=scraping]'))">Vai a Scraping</button>` : ''}
+    </div>`;
+    lucide.createIcons({ nodes: [grid] });
+    return;
+  }
+
+  grid.innerHTML = posts.slice(0, 100).map(p => `
+    <article class="post-card" onclick="showPostDetail('${p.id}')">
+      <div class="post-meta">
+        <div class="post-avatar" aria-hidden="true">${p.username.slice(0,2).toUpperCase()}</div>
+        <div>
+          <div class="post-username">@${p.username}</div>
+          <div class="post-date">${fmtDate(p.timestamp)}</div>
+        </div>
+        <span class="badge ${p.type==='Video'?'badge-purple':'badge-neutral'}" style="margin-left:auto">${p.type}</span>
+      </div>
+      <p class="post-caption">${escHtml(p.caption || '(nessuna caption)')}</p>
+      ${p.hashtags && p.hashtags.length > 0 ? `<div class="tag-list">${p.hashtags.slice(0,5).map(h => `<span class="badge badge-blue">#${h}</span>`).join('')}${p.hashtags.length>5?`<span class="badge badge-neutral">+${p.hashtags.length-5}</span>`:''}</div>` : ''}
+      <div class="post-stats">
+        <span class="post-stat"><i data-lucide="heart" style="width:12px;height:12px;color:var(--color-error)"></i> ${fmt(p.likesCount)}</span>
+        <span class="post-stat"><i data-lucide="message-circle" style="width:12px;height:12px"></i> ${fmt(p.commentsCount)}</span>
+        ${p.comments && p.comments.length > 0 ? `<span class="badge badge-neutral" style="margin-left:auto"><i data-lucide="download-cloud" style="width:10px;height:10px;margin-right:2px"></i> ${p.comments.length} commenti letti</span>` : '<span style="margin-left:auto"></span>'}
+        ${p.visualContext ? `<span class="badge badge-purple" style="margin-left:var(--space-1);display:flex;align-items:center"><i data-lucide="eye" style="width:10px;height:10px;margin-right:2px"></i> Vision AI</span>` : ''}
+      </div>
+    </article>
+  `).join('');
+  if (posts.length > 100) {
+    grid.innerHTML += `<div style="grid-column:1/-1;text-align:center;padding:var(--space-4);color:var(--color-text-muted);font-size:var(--text-sm)">Mostrando 100 di ${posts.length} post. Usa i filtri per restringere la ricerca.</div>`;
+  }
+  lucide.createIcons({ nodes: [grid] });
+}
+
+function showPostDetail(id) {
+  const post = state.posts.find(p => p.id === id);
+  if (!post) return;
+  const content = document.getElementById('modal-post-content');
+  document.getElementById('modal-post-title').textContent = `@${post.username}`;
+  content.innerHTML = `
+    <div style="margin-bottom:var(--space-4)">
+      <div style="display:flex;gap:var(--space-4);margin-bottom:var(--space-3)">
+        <span class="badge badge-${post.type==='Video'?'purple':'neutral'}">${post.type}</span>
+        <span style="color:var(--color-text-muted);font-size:var(--text-sm)">${fmtDate(post.timestamp)}</span>
+      </div>
+      <div style="display:flex;gap:var(--space-6);margin-bottom:var(--space-4)">
+        <span class="post-stat"><i data-lucide="heart" style="width:14px;height:14px;color:var(--color-error)"></i> <strong>${fmt(post.likesCount)}</strong> like</span>
+        <span class="post-stat"><i data-lucide="message-circle" style="width:14px;height:14px"></i> <strong>${fmt(post.commentsCount)}</strong> commenti</span>
+      </div>
+    </div>
+    <div style="background:var(--color-surface-offset);border-radius:var(--radius-md);padding:var(--space-4);font-size:var(--text-sm);line-height:1.7;color:var(--color-text-muted);white-space:pre-wrap;max-height:300px;overflow-y:auto">${escHtml(post.caption || '(nessuna caption)')}</div>
+    ${post.visualContext ? `
+      <div style="margin-top:var(--space-4);padding:var(--space-3);background:var(--color-surface);border-left:3px solid var(--color-purple);border-radius:var(--radius-sm)">
+        <div style="font-size:var(--text-xs);font-weight:700;color:var(--color-purple);margin-bottom:var(--space-1);display:flex;align-items:center"><i data-lucide="eye" style="width:12px;height:12px;margin-right:var(--space-1)"></i> Contesto Visivo Estratto (AI Vision)</div>
+        <div style="font-size:var(--text-sm);line-height:1.5;color:var(--color-text)">${escHtml(post.visualContext)}</div>
+      </div>
+    ` : ''}
+    ${post.comments && post.comments.length > 0 ? `
+      <div style="margin-top:var(--space-4);padding:var(--space-3);background:var(--color-surface);border-radius:var(--radius-sm)">
+        <div style="font-size:var(--text-xs);font-weight:700;color:var(--color-text);margin-bottom:var(--space-2);display:flex;align-items:center"><i data-lucide="message-square" style="width:12px;height:12px;margin-right:var(--space-1)"></i> Top Commenti Letti</div>
+        <ul style="margin:0;padding-left:var(--space-4);font-size:var(--text-sm);color:var(--color-text-muted);display:flex;flex-direction:column;gap:var(--space-1)">
+          ${post.comments.slice(0,5).map(c => `<li>"${escHtml(c)}"</li>`).join('')}
+          ${post.comments.length > 5 ? `<li style="list-style:none;margin-top:var(--space-1);font-size:var(--text-xs)">+ altri ${post.comments.length - 5} commenti estratti...</li>` : ''}
+        </ul>
+      </div>
+    ` : ''}
+    ${post.hashtags && post.hashtags.length > 0 ? `<div class="tag-list mt-4">${post.hashtags.map(h => `<span class="badge badge-blue">#${h}</span>`).join('')}</div>` : ''}
+    <div style="margin-top:var(--space-4);display:flex;gap:var(--space-3)">
+      <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm"><i data-lucide="external-link" style="width:12px;height:12px"></i> Apri su Instagram</a>
+    </div>
+  `;
+  lucide.createIcons({ nodes: [content] });
+  openModal('modal-post');
+}
+
+// --- EXPORTS ---
+function exportPostsCSV() {
+  if (state.posts.length === 0) { toast('Nessun post da esportare', 'warning'); return; }
+  const cols = ['id','username','caption','likesCount','commentsCount','timestamp','url','type'];
+  const csv = cols.join(',') + '\n' + state.posts.map(p =>
+    cols.map(c => `"${String(p[c]||'').replace(/"/g,'""')}"`).join(',')
+  ).join('\n');
+  downloadText(csv, 'posts_finspy.csv', 'text/csv');
+  toast('CSV esportato', 'success');
+}
+
+function exportPostsJSON() {
+  downloadText(JSON.stringify(state.posts, null, 2), 'posts_finspy.json', 'application/json');
+  toast('JSON esportato', 'success');
+}
+
+function exportAllDataJSON() {
+  const backup = { profiles: state.profiles, posts: state.posts, analyses: state.analyses, reports: state.reports, scrapeHistory: state.scrapeHistory, exportedAt: new Date().toISOString() };
+  downloadText(JSON.stringify(backup, null, 2), `finspy_backup_${fmtDateFile()}.json`, 'application/json');
+  toast('Backup esportato', 'success');
+}
+
+function importDataJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.profiles) state.profiles = data.profiles;
+      if (data.posts) state.posts = data.posts;
+      if (data.analyses) state.analyses = data.analyses;
+      if (data.reports) state.reports = data.reports;
+      if (data.scrapeHistory) state.scrapeHistory = data.scrapeHistory;
+      await saveState();
+      refreshAll();
+      toast('Backup ripristinato', 'success');
+    } catch(err) { toast('Errore nel ripristino: file non valido', 'error'); }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// --- AI ANALYSIS ---
+function refreshAnalysisSelects() {
+  const users = [...new Set(state.posts.map(p => p.username))].sort();
+  const analysisSelect = document.getElementById('analysis-profile-select');
+  analysisSelect.innerHTML = '<option value="">Tutti i profili</option>' + users.map(u => `<option value="${u}">@${u}</option>`).join('');
+  renderAnalysisList();
+
+  const reportSelect = document.getElementById('report-analysis-select');
+  if (reportSelect) {
+    reportSelect.innerHTML = '<option value="">Nessuna analisi</option>' + state.analyses.map(a => `<option value="${a.id}">${a.title}</option>`).join('');
+  }
+}
+
+async function runAnalysis() {
+  const token = state.settings.openaiToken;
+  if (!token) { openModal('modal-settings'); toast('Inserisci prima la API Key OpenAI', 'warning'); return; }
+  if (state.posts.length === 0) { toast('Nessun post da analizzare. Prima fai uno scraping.', 'warning'); return; }
+
+  const profileFilter = document.getElementById('analysis-profile-select').value;
+  const maxPosts = parseInt(document.getElementById('analysis-max-posts').value) || 30;
+  const title = document.getElementById('analysis-title').value.trim() || `Analisi ${fmtDate(new Date().toISOString())}`;
+
+  let posts = [...state.posts];
+  if (profileFilter) posts = posts.filter(p => p.username === profileFilter);
+  posts.sort((a,b) => b.likesCount - a.likesCount);
+  posts = posts.slice(0, maxPosts);
+
+  const btn = document.getElementById('btn-run-analysis');
+  btn.disabled = true;
+  document.getElementById('analysis-progress').style.display = 'block';
+  setAnalysisProgress(20, 'Preparazione dati...');
+
+  const captions = posts.map(p => {
+    let s = `[Autore: @${p.username}]\n[Caption]: ${p.caption}`;
+    if (p.visualContext) s += `\n[Contenuto Visivo Post/Copertina]: ${p.visualContext}`;
+    if (p.comments && p.comments.length > 0) s += `\n[Commenti reali del pubblico]:\n- ${p.comments.join('\n- ')}`;
+    return s;
+  }).filter(c => c.length > 30).join('\n\n=====\n\n');
+
+  let tovContext = '';
+  if (state.tov && state.tov.length > 0) {
+    tovContext = `\n\n=== TONE OF VOICE (IL TUO STILE GUIDA) ===\nHai a disposizione degli esempi del TONE OF VOICE dell'utente. Devi ASSIMILARE perfettamente questo stile (il vocabolario, l'atteggiamento, la formattazione testuale, l'ironia o la serietà) e usarlo ESCLUSIVAMENTE per scrivere i contenuti all'interno della proprietà "writtenContent".\nEcco i documenti ToV da impersonare:\n` + state.tov.map(t => `[Titolo: ${t.title}]\n${t.content}`).join('\n\n');
+  }
+
+  const systemPrompt = `Sei uno strategist di contenuti senior e copywriter esperto per la nicchia finanza e investimenti in Italia. L'obiettivo è trasformare i dati grezzi dei profili Instagram dei competitor in una VERA MAPPA STRATEGICA editoriale e in CONTENUTI PRONTI ALL'USO.
+Devi analizzare in profondità le caption, i testi estratti dalle immagini e i commenti reali del pubblico per trovare insight strategici.${tovContext}
+Tira fuori TUTTO il potenziale dai dati. ATTENZIONE: Questo è un task CRITICO. DEVI estrarre ESATTAMENTE 10 angoli comunicativi differenti, 15 obiezioni comuni, 10 problemi del target e 5 pattern. Non fermarti mai prima di aver raggiunto queste esatte quantità o il sistema crascerà. SFORZATI e pensa ad alta voce.
+All'interno dell'array "angles", per ogni angolo devi compilare l'attributo "writtenContent". Qui non devi descrivere l'idea, ma SCRIVERE IL TESTO DEFINITIVO ESATTO dalla prima all'ultima parola. È ASSOLUTAMENTE OBBLIGATORIO applicare il Tone of Voice letto in precedenza: copia esattamente quella stessa personalità, vocabolario, ironia o serietà.
+Rispondi SOLO con un JSON valido (la radice deve essere un oggetto) con questa struttura esatta:
+{
+  "angles": [
+    {
+      "title": "Nome chiaro dell'angolo comunicativo",
+      "description": "Spiegazione approfondita di quale tensione intercetta, a quale bisogno/paura risponde e perché funziona",
+      "primaryLever": "Leva psicologica/persuasiva principale (es. FOMO, Paura povertà, Status, Semplicità, ecc.)",
+      "context": "Contesto o argomenti specifici in cui conviene usare questo angolo",
+      "contentIdeas": [{
+        "format": "Script Reel | Post Testuale | Carosello", 
+        "hook": "L'hook iniziale ad alto impatto (deve fermare lo scroll)", 
+        "concept": "Il ragionamento alla base",
+        "writtenContent": "IL CONTENUTO SCRITTO PER INTERO DALLA A ALLA Z. Nessun riassunto! Scrivi l'intero copione del reel (indicando le scene visive tra parentesi e le esatte parole da dire), o l'intero carosello (testo esatto di ogni Slide), o l'intero post lungo. Usa il Tone of Voice in modo magistrale per sembrare un essere umano."
+      }],
+      "frequency": "alta|media|bassa"
+    }
+  ],
+  "objections": [
+    {
+      "formulation": "L'obiezione come la direbbe una persona reale (ricavato da commenti o dedotto)",
+      "category": "Sfiducia | Pigrizia | Mancanza budget | Paura truffe | Complessità | ecc.",
+      "rootCause": "Cosa c'è emotivamente dietro?",
+      "contentResponse": "Idea o approccio per smontarla in un contenuto"
+    }
+  ],
+  "problems": [
+    {
+      "text": "Il problema pratico o emotivo vissuto dal target sulla sua pelle",
+      "category": "Ansia | Paralisi decisionale | Mancanza di metodo | ecc.",
+      "intensity": "Alta | Media | Bassa",
+      "editorialOpportunity": "Idea di contenuto specifico per risolvere o toccare questo problema"
+    }
+  ],
+  "patterns": [
+    {
+      "text": "Titolo del pattern ricorrente (es. 'Semplificazione miti', 'Uso dell'invidia sociale')",
+      "description": "Analisi di cosa accomuna i post di maggior successo o di come il pubblico reagisce ai trend (dedotto dai dati)"
+    }
+  ],
+  "keywords": ["gergo reale", "frasi ricorrenti"],
+  "insights": "Sintesi di alto livello: 2-3 direzioni strategiche scoperte per posizionarsi meglio dei competitor analizzati."
+}`;
+
+  const userPrompt = `Analizza il seguente set di contenuti della nicchia finanza/investimenti italiana. I dati contengono l'autore, la caption, il contenuto visivo letto tramite AI Vision e i commenti del pubblico.\n\n${captions.slice(0, 90000)}`;
+
+  setAnalysisProgress(50, 'Chiamata OpenAI in corso...');
+
+  try {
+    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({
+        model: state.settings.model || 'gpt-4o-mini',
+        messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
+        temperature: 0.7,
+        max_tokens: 12000,
+        response_format: { type: "json_object" }
+      })
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${resp.status}`);
+    }
+
+    const data = await resp.json();
+    const rawText = data.choices?.[0]?.message?.content || '{}';
+    setAnalysisProgress(80, 'Elaborazione risultati...');
+
+    let parsed = {};
+    try {
+      const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+      parsed = JSON.parse(jsonMatch ? jsonMatch[0] : rawText);
+    } catch(e) {
+      parsed = { angles: [], objections: [], problems: [], patterns: [], keywords: [], insights: rawText };
+    }
+
+    const analysis = {
+      id: genId(), title, createdAt: new Date().toISOString(),
+      profile: profileFilter || 'tutti',
+      postIds: posts.map(p => p.id), postCount: posts.length,
+      angles: parsed.angles || [],
+      objections: parsed.objections || [],
+      problems: parsed.problems || [],
+      patterns: parsed.patterns || [],
+      keywords: parsed.keywords || [],
+      insights: parsed.insights || '',
+      rawText
+    };
+    state.analyses.unshift(analysis);
+    await saveState();
+
+    setAnalysisProgress(100, 'Completato!');
+    setTimeout(() => { document.getElementById('analysis-progress').style.display = 'none'; }, 1500);
+
+    document.getElementById('badge-analisi').textContent = state.analyses.length;
+    renderAnalysisList();
+    showAnalysisDetail(analysis.id);
+    document.getElementById('analysis-title').value = '';
+    toast('Analisi completata!', 'success');
+  } catch(err) {
+    setAnalysisProgress(0, '');
+    document.getElementById('analysis-progress').style.display = 'none';
+    toast(`Errore OpenAI: ${err.message}`, 'error');
+  }
+
+  btn.disabled = false;
+}
+
+function setAnalysisProgress(pct, msg) {
+  document.getElementById('analysis-progress-bar').style.width = pct + '%';
+  document.getElementById('analysis-status-msg').textContent = msg;
+}
+
+function renderAnalysisList() {
+  const container = document.getElementById('analysis-list');
+  document.getElementById('badge-analisi').textContent = state.analyses.length;
+  if (state.analyses.length === 0) {
+    container.innerHTML = `<div class="empty-state" style="padding:var(--space-8)">
+      <i data-lucide="brain" style="width:36px;height:36px"></i>
+      <h3>Nessuna analisi</h3><p>Genera la prima analisi</p></div>`;
+    lucide.createIcons({ nodes: [container] });
+    return;
+  }
+  container.innerHTML = state.analyses.map(a => `
+    <div style="background:var(--color-surface-offset);border-radius:var(--radius-md);padding:var(--space-4);display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-3)">
+      <div>
+        <div style="font-weight:700;font-size:var(--text-sm);color:var(--color-text);margin-bottom:var(--space-1)">${escHtml(a.title)}</div>
+        <div style="font-size:var(--text-xs);color:var(--color-text-muted)">${fmtDate(a.createdAt)} · ${a.postCount} post · ${a.profile}</div>
+        <div class="tag-list" style="margin-top:var(--space-2)">
+          <span class="badge badge-gold">${(a.angles||[]).length} angoli</span>
+          <span class="badge badge-blue">${(a.objections||[]).length} obiezioni</span>
+          <span class="badge badge-teal">${(a.problems||[]).length} problemi</span>
+          ${a.patterns && a.patterns.length > 0 ? `<span class="badge badge-purple">${a.patterns.length} pattern</span>` : ''}
+        </div>
+      </div>
+      <div style="display:flex;gap:var(--space-1);flex-shrink:0">
+        <button class="btn btn-secondary btn-sm" onclick="showAnalysisDetail('${a.id}')">Vedi</button>
+        <button class="btn btn-ghost btn-sm" onclick="deleteAnalysis('${a.id}')" aria-label="Elimina"><i data-lucide="trash-2" style="width:13px;height:13px;color:var(--color-error)"></i></button>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons({ nodes: [container] });
+}
+
+function showAnalysisDetail(id) {
+  const a = state.analyses.find(x => x.id === id);
+  if (!a) return;
+  state.currentAnalysisId = id;
+
+  const detail = document.getElementById('analysis-detail');
+  const content = document.getElementById('analysis-detail-content');
+  document.getElementById('analysis-detail-title').textContent = a.title;
+
+  content.innerHTML = `
+    ${a.insights ? `<div class="card mb-4" style="background:var(--color-primary-highlight);border-color:oklch(from var(--color-primary) l c h / 0.3)"><p style="font-size:var(--text-sm);color:var(--color-text);line-height:1.6"><strong>💡 Direzione Strategica:</strong> ${escHtml(a.insights)}</p></div>` : ''}
+    
+    <div class="analysis-section">
+      <h3><i data-lucide="target" style="width:16px;height:16px;color:var(--color-primary)"></i> Angoli Comunicativi (${(a.angles||[]).length})</h3>
+      ${(a.angles||[]).length === 0 ? '<p class="text-faint">Nessun angolo trovato</p>' : (a.angles||[]).map(ang => `
+        <div class="angle-card" style="margin-bottom:var(--space-4);padding:var(--space-5)">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-3);margin-bottom:var(--space-3)">
+            <div>
+              <div class="angle-title" style="font-size:var(--text-base)">${escHtml(ang.title)}</div>
+              ${ang.primaryLever ? `<span class="badge badge-gold" style="margin-bottom:var(--space-2)"><i data-lucide="zap" style="width:10px;height:10px"></i> Leva: ${escHtml(ang.primaryLever)}</span>` : ''}
+            </div>
+            <span class="badge ${ang.frequency==='alta'?'badge-green':ang.frequency==='media'?'badge-gold':'badge-neutral'}">${ang.frequency || ''}</span>
+          </div>
+          <div class="angle-desc" style="margin-bottom:var(--space-3);line-height:1.6">${escHtml(ang.description)}</div>
+          ${ang.context ? `<div style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-4)"><strong>Contesto ideale:</strong> ${escHtml(ang.context)}</div>` : ''}
+          
+          ${ang.contentIdeas && ang.contentIdeas.length > 0 ? `
+            <div style="background:var(--color-bg);border:1px solid var(--color-divider);border-radius:var(--radius-md);padding:var(--space-3)">
+              <div style="font-size:var(--text-xs);font-weight:700;margin-bottom:var(--space-2);color:var(--color-text)">💡 Idee e Testi Pronti</div>
+              <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+                ${ang.contentIdeas.map(idea => `
+                  <div style="font-size:var(--text-sm);padding:var(--space-2);background:var(--color-surface);border-radius:var(--radius-sm)">
+                    <strong style="color:var(--color-primary)">[${escHtml(idea.format)}]</strong> <strong>Hook:</strong> ${escHtml(idea.hook)}<br>
+                    <span style="color:var(--color-text-muted);display:inline-block;margin-top:2px">${escHtml(idea.concept)}</span>
+                    ${idea.writtenContent ? `<div style="margin-top:var(--space-3);padding:var(--space-3);background:var(--color-surface-offset);border-left:3px solid var(--color-primary);border-radius:var(--radius-sm);font-family:monospace;white-space:pre-wrap;font-size:var(--text-xs);line-height:1.5;color:var(--color-text)">${escHtml(idea.writtenContent)}</div>` : ''}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="section-grid col2">
+      <div class="analysis-section">
+        <h3><i data-lucide="alert-circle" style="width:16px;height:16px;color:var(--color-error)"></i> Obiezioni Comuni (${(a.objections||[]).length})</h3>
+        <div class="item-list">${(a.objections||[]).length === 0 ? '<p class="text-faint">Nessuna obiezione trovata</p>' : (a.objections||[]).map(obj => `
+          <div class="item-row" style="flex-direction:column">
+            <div style="display:flex;align-items:flex-start;gap:var(--space-2);width:100%">
+              <i data-lucide="minus-circle" class="item-row-icon" style="color:var(--color-error)"></i>
+              <div style="flex:1">
+                <div class="item-row-text" style="font-weight:600;font-style:italic">"${escHtml(obj.formulation || obj.text)}"</div>
+                ${obj.category ? `<span class="badge badge-red" style="margin-top:var(--space-2)">${escHtml(obj.category)}</span>` : ''}
+              </div>
+            </div>
+            ${obj.rootCause ? `<div style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-2);padding-left:calc(14px + var(--space-2))"><strong>Radice:</strong> ${escHtml(obj.rootCause)}<br><span style="color:var(--color-text)"><strong>Soluzione:</strong> ${escHtml(obj.contentResponse)}</span></div>` : ''}
+          </div>
+        `).join('')}</div>
+      </div>
+
+      <div class="analysis-section">
+        <h3><i data-lucide="help-circle" style="width:16px;height:16px;color:var(--color-blue)"></i> Problemi del Target (${(a.problems||[]).length})</h3>
+        <div class="item-list">${(a.problems||[]).length === 0 ? '<p class="text-faint">Nessun problema trovato</p>' : (a.problems||[]).map(prob => `
+          <div class="item-row" style="flex-direction:column">
+            <div style="display:flex;align-items:flex-start;gap:var(--space-2);width:100%">
+               <i data-lucide="arrow-right" class="item-row-icon" style="color:var(--color-blue)"></i>
+               <div style="flex:1">
+                 <div class="item-row-text" style="font-weight:600">${escHtml(prob.text)}</div>
+                 <div style="margin-top:var(--space-2)">
+                   ${prob.category ? `<span class="badge badge-blue">${escHtml(prob.category)}</span>` : ''}
+                   ${prob.intensity ? `<span class="badge badge-neutral">Intensità: ${escHtml(prob.intensity)}</span>` : ''}
+                 </div>
+               </div>
+            </div>
+            ${prob.editorialOpportunity ? `<div style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-2);padding-left:calc(14px + var(--space-2))"><strong>Opp. Editoriale:</strong> ${escHtml(prob.editorialOpportunity)}</div>` : ''}
+          </div>
+        `).join('')}</div>
+      </div>
+    </div>
+
+    ${a.patterns && a.patterns.length > 0 ? `
+      <div class="analysis-section">
+        <h3><i data-lucide="git-merge" style="width:16px;height:16px;color:var(--color-purple)"></i> Pattern Strategici & Miti (${a.patterns.length})</h3>
+        <div class="section-grid col2">
+          ${a.patterns.map(pat => `
+            <div style="background:var(--color-surface-offset);border-left:3px solid var(--color-purple);padding:var(--space-3);border-radius:0 var(--radius-md) var(--radius-md) 0">
+              <strong style="font-size:var(--text-sm);color:var(--color-text)">${escHtml(pat.text)}</strong>
+              <div style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-1)">${escHtml(pat.description)}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    ` : ''}
+
+    ${a.keywords && a.keywords.length > 0 ? `
+      <div class="analysis-section">
+        <h3><i data-lucide="hash" style="width:16px;height:16px;color:var(--color-teal)"></i> Parole chiave (${a.keywords.length})</h3>
+        <div class="tag-list">${a.keywords.map(k => `<span class="badge badge-teal">${escHtml(k)}</span>`).join('')}</div>
+      </div>
+    ` : ''}
+  `;
+  lucide.createIcons({ nodes: [content] });
+  detail.style.display = 'block';
+  detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function deleteAnalysis(id) {
+  if (!confirm('Eliminare questa analisi?')) return;
+  state.analyses = state.analyses.filter(a => a.id !== id);
+  saveState();
+  renderAnalysisList();
+  document.getElementById('analysis-detail').style.display = 'none';
+  toast('Analisi eliminata', 'success');
+}
+
+// --- REPORTS ---
+function refreshReportPage() {
+  document.getElementById('report-count').textContent = state.reports.length;
+  document.getElementById('badge-report').textContent = state.reports.length;
+  const reportSelect = document.getElementById('report-analysis-select');
+  if (reportSelect) {
+    reportSelect.innerHTML = '<option value="">Nessuna analisi</option>' + state.analyses.map(a => `<option value="${a.id}">${a.title}</option>`).join('');
+  }
+  renderReportList();
+}
+
+function generateReport() {
+  const id = state.currentAnalysisId;
+  if (!id) return;
+  state.currentAnalysisId = id;
+  document.getElementById('report-analysis-select').value = id;
+  document.getElementById('report-title-inp').value = state.analyses.find(a => a.id === id)?.title || '';
+  showPage('report', document.querySelector('[data-page=report]'));
+  toast('Passa alla pagina Report e clicca "Genera e scarica HTML"', 'info');
+}
+
+function generateCustomReport() {
+  const title = document.getElementById('report-title-inp').value.trim() || `Report FinSpy ${fmtDate(new Date().toISOString())}`;
+  const analysisId = document.getElementById('report-analysis-select').value;
+  const analysis = analysisId ? state.analyses.find(a => a.id === analysisId) : null;
+
+  const topPosts = [...state.posts].sort((a,b) => b.likesCount - a.likesCount).slice(0, 20);
+
+  const html = buildReportHTML(title, topPosts, analysis);
+
+  const report = { id: genId(), title, createdAt: new Date().toISOString(), html };
+  state.reports.unshift(report);
+  if (state.reports.length > 50) state.reports.pop();
+  saveState();
+
+  downloadText(html, `report_${fmtDateFile()}.html`, 'text/html');
+  refreshReportPage();
+  toast('Report generato e scaricato', 'success');
+}
+
+function buildReportHTML(title, posts, analysis) {
+  const now = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' });
+  return `<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escHtml(title)}</title>
+<style>
+  body { font-family: 'Inter', 'Helvetica Neue', sans-serif; max-width: 900px; margin: 0 auto; padding: 40px 24px; color: #1a1a2e; background: #f8f9fa; }
+  h1 { font-size: 2em; color: #0d1117; border-bottom: 3px solid #c9a84c; padding-bottom: 12px; margin-bottom: 8px; }
+  h2 { font-size: 1.25em; color: #0d1117; margin-top: 40px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  h2::before { content: ''; display: inline-block; width: 4px; height: 1em; background: #c9a84c; border-radius: 2px; }
+  h3 { font-size: 1em; font-weight: 700; color: #c9a84c; margin-bottom: 6px; }
+  .meta { color: #6b7a8d; font-size: 0.875em; margin-bottom: 32px; }
+  .post-card { background: #fff; border: 1px solid #e5e9f2; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .post-user { font-weight: 700; color: #c9a84c; }
+  .post-date { color: #9aa5b4; font-size: 0.8em; }
+  .post-caption { font-size: 0.875em; color: #555; line-height: 1.6; margin: 12px 0; }
+  .post-stats { font-size: 0.8em; color: #9aa5b4; }
+  .angle-card { background: #fff; border: 1px solid #e5e9f2; border-radius: 8px; padding: 16px; margin-bottom: 12px; }
+  .item { background: #f8f9fa; border-radius: 6px; padding: 12px 16px; margin-bottom: 8px; font-size: 0.875em; color: #555; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.75em; font-weight: 600; margin-right: 4px; }
+  .badge-gold { background: #fdf4e7; color: #9a7820; }
+  .badge-green { background: #e8f5e9; color: #1f8a5a; }
+  .tag { display: inline-block; background: #eef2ff; color: #4a6da8; padding: 2px 8px; border-radius: 999px; font-size: 0.75em; margin: 2px; }
+  .insights { background: #fdf4e7; border: 1px solid #e9d9b0; border-radius: 8px; padding: 16px; margin-bottom: 24px; font-style: italic; }
+  .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 600px) { .section-grid { grid-template-columns: 1fr; } }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #e5e9f2; color: #9aa5b4; font-size: 0.8em; }
+</style>
+</head>
+<body>
+<h1>📊 ${escHtml(title)}</h1>
+<p class="meta">Generato il ${now} · ${posts.length} post analizzati · ${state.profiles.length} profili monitorati</p>
+
+${analysis ? `
+<h2>Analisi AI: ${escHtml(analysis.title)}</h2>
+${analysis.insights ? `<div class="insights"><strong>💡 Direzione Strategica:</strong><br>${escHtml(analysis.insights)}</div>` : ''}
+
+<h2>Angoli Comunicativi (${(analysis.angles||[]).length})</h2>
+${(analysis.angles||[]).map(a => `
+<div class="angle-card">
+  <h3>${escHtml(a.title)} <span class="badge badge-${a.frequency==='alta'?'green':'gold'}">${a.frequency||''}</span></h3>
+  ${a.primaryLever ? `<p style="font-size:0.8em;color:#9a7820;margin-bottom:8px;font-weight:700">Leva: ${escHtml(a.primaryLever)}</p>` : ''}
+  <p style="font-size:0.875em;color:#555;margin:0 0 12px;line-height:1.6">${escHtml(a.description)}</p>
+  ${a.context ? `<p style="font-size:0.8em;color:#6b7a8d;margin-bottom:12px"><em>Contesto: ${escHtml(a.context)}</em></p>` : ''}
+  ${a.contentIdeas && a.contentIdeas.length > 0 ? `
+    <div style="background:#f8f9fa;border:1px solid #e5e9f2;padding:12px;border-radius:6px;margin-top:12px">
+      <strong style="font-size:0.85em;color:#333;display:block;margin-bottom:8px">💡 Contenuti Generati su Misura:</strong>
+      ${a.contentIdeas.map(id => `
+        <div style="font-size:0.85em;margin-bottom:12px">
+          <strong>[${escHtml(id.format)}] Hook:</strong> ${escHtml(id.hook)}<br>
+          <span style="color:#666">${escHtml(id.concept)}</span>
+          ${id.writtenContent ? `<div style="margin-top:8px;padding:12px;background:#fff;border:1px solid #e5e9f2;border-left:3px solid #c9a84c;white-space:pre-wrap;font-family:monospace;font-size:0.9em;color:#444">${escHtml(id.writtenContent)}</div>` : ''}
+        </div>`).join('')}
+    </div>
+  ` : ''}
+</div>`).join('')}
+
+<div class="section-grid">
+<div>
+<h2>Obiezioni Comuni (${(analysis.objections||[]).length})</h2>
+${(analysis.objections||[]).map(o => `
+<div class="item">
+  <strong>❌ "${escHtml(o.formulation || o.text)}"</strong><br>
+  <span class="badge badge-gold" style="margin-top:6px">${escHtml(o.category||'')}</span>
+  ${o.rootCause ? `<div style="margin-top:6px;font-size:0.9em;color:#666"><em>Radice:</em> ${escHtml(o.rootCause)}<br><em>Risposta:</em> ${escHtml(o.contentResponse)}</div>` : ''}
+</div>`).join('')}
+</div>
+<div>
+<h2>Problemi del Target (${(analysis.problems||[]).length})</h2>
+${(analysis.problems||[]).map(p => `
+<div class="item">
+  <strong>→ ${escHtml(p.text)}</strong><br>
+  <span class="badge badge-gold" style="margin-top:6px">${escHtml(p.category||'')}</span>
+  ${p.editorialOpportunity ? `<div style="margin-top:6px;font-size:0.9em;color:#666"><em>Opportunità:</em> ${escHtml(p.editorialOpportunity)}</div>` : ''}
+</div>`).join('')}
+</div>
+</div>
+
+${analysis.patterns?.length ? `
+<h2>Pattern Strategici & Miti</h2>
+<div class="section-grid">
+  ${analysis.patterns.map(pat => `
+  <div class="item" style="border-left:3px solid #8b6ddb">
+    <strong>${escHtml(pat.text)}</strong><br>
+    <span style="font-size:0.9em;color:#666">${escHtml(pat.description)}</span>
+  </div>`).join('')}
+</div>` : ''}
+
+${analysis.keywords?.length ? `
+<h2>Parole chiave</h2>
+<div>${analysis.keywords.map(k => `<span class="tag">${escHtml(k)}</span>`).join('')}</div>` : ''}
+` : ''}
+
+<h2>Top ${posts.length} Post per Engagement</h2>
+${posts.map((p,i) => `
+<div class="post-card">
+  <div><span class="post-user">#${i+1} @${escHtml(p.username)}</span> <span class="post-date">· ${fmtDate(p.timestamp)}</span></div>
+  <div class="post-stats">❤️ ${fmt(p.likesCount)} · 💬 ${fmt(p.commentsCount)}</div>
+  <p class="post-caption">${escHtml(p.caption?.slice(0,500) || '')}${p.caption?.length>500?'…':''}</p>
+  ${p.hashtags?.length ? `<div>${p.hashtags.slice(0,8).map(h => `<span class="tag">#${escHtml(h)}</span>`).join('')}</div>` : ''}
+</div>`).join('')}
+
+<footer>
+  Generato da FinSpy — Finance Intelligence Dashboard · ${state.profiles.length} profili · ${state.posts.length} post totali nel database
+</footer>
+</body></html>`;
+}
+
+function renderReportList() {
+  const container = document.getElementById('report-list');
+  document.getElementById('report-count').textContent = state.reports.length;
+  document.getElementById('badge-report').textContent = state.reports.length;
+  if (state.reports.length === 0) {
+    container.innerHTML = `<div class="empty-state" style="padding:var(--space-10)">
+      <i data-lucide="file-text" style="width:36px;height:36px"></i>
+      <h3>Nessun report</h3><p>Genera il primo report</p></div>`;
+    lucide.createIcons({ nodes: [container] });
+    return;
+  }
+  container.innerHTML = state.reports.map(r => `
+    <div class="report-card">
+      <div class="report-info">
+        <h4>${escHtml(r.title)}</h4>
+        <p>${fmtDate(r.createdAt)}</p>
+      </div>
+      <div class="report-actions">
+        <button class="btn btn-secondary btn-sm" onclick="previewReport('${r.id}')"><i data-lucide="eye" style="width:12px;height:12px"></i> Anteprima</button>
+        <button class="btn btn-primary btn-sm" onclick="downloadReport('${r.id}')"><i data-lucide="download" style="width:12px;height:12px"></i> Scarica</button>
+        <button class="btn btn-ghost btn-sm" onclick="deleteReport('${r.id}')" aria-label="Elimina"><i data-lucide="trash-2" style="width:13px;height:13px;color:var(--color-error)"></i></button>
+      </div>
+    </div>
+  `).join('');
+  lucide.createIcons({ nodes: [container] });
+}
+
+function previewReport(id) {
+  const r = state.reports.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('modal-report-title').textContent = r.title;
+  document.getElementById('modal-report-content').innerHTML = `<iframe srcdoc="${escAttr(r.html)}" style="width:100%;height:60dvh;border:none;border-radius:var(--radius-md)"></iframe>`;
+  openModal('modal-report');
+}
+
+function downloadReport(id) {
+  const r = state.reports.find(x => x.id === id);
+  if (!r) return;
+  downloadText(r.html, `report_${fmtDateFile()}.html`, 'text/html');
+  toast('Report scaricato', 'success');
+}
+
+function deleteReport(id) {
+  if (!confirm('Eliminare questo report?')) return;
+  state.reports = state.reports.filter(r => r.id !== id);
+  saveState();
+  refreshReportPage();
+  toast('Report eliminato', 'success');
+}
+
+// --- DASHBOARD ---
+function renderDashboard() {
+  updateKPIs();
+  const recentPosts = [...state.posts].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 5);
+  const recentEl = document.getElementById('dash-recent-posts');
+  if (recentPosts.length === 0) {
+    recentEl.innerHTML = `<div class="empty-state" style="padding:var(--space-8)"><i data-lucide="inbox" style="width:36px;height:36px"></i><h3 style="font-size:var(--text-sm)">Nessun post</h3><p>Aggiungi profili e avvia lo scraping</p></div>`;
+    lucide.createIcons({ nodes: [recentEl] });
+  } else {
+    recentEl.innerHTML = recentPosts.map(p => `
+      <div style="display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider)" onclick="showPostDetail('${p.id}')" style="cursor:pointer">
+        <div class="post-avatar" style="width:28px;height:28px;font-size:var(--text-xs)">${p.username.slice(0,2).toUpperCase()}</div>
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:var(--space-2)">
+            <span style="font-weight:700;font-size:var(--text-xs);color:var(--color-primary)">@${p.username}</span>
+            <span style="font-size:var(--text-xs);color:var(--color-text-faint)">${fmtDate(p.timestamp)}</span>
+          </div>
+          <p style="font-size:var(--text-xs);color:var(--color-text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%">${p.caption?.slice(0,80)||'...'}</p>
+          <div style="display:flex;gap:var(--space-3);margin-top:var(--space-1)">
+            <span style="font-size:var(--text-xs);color:var(--color-text-faint)">❤️ ${fmt(p.likesCount)}</span>
+            <span style="font-size:var(--text-xs);color:var(--color-text-faint)">💬 ${fmt(p.commentsCount)}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  const latestAnalysis = state.analyses[0];
+  const anglesEl = document.getElementById('dash-angles');
+  if (!latestAnalysis) {
+    anglesEl.innerHTML = `<div class="empty-state" style="padding:var(--space-8)"><i data-lucide="sparkles" style="width:36px;height:36px"></i><h3 style="font-size:var(--text-sm)">Nessuna analisi</h3><p>Raccogli post e genera un'analisi AI</p></div>`;
+    lucide.createIcons({ nodes: [anglesEl] });
+  } else {
+    anglesEl.innerHTML = `<div style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-3)">Da: <strong>${escHtml(latestAnalysis.title)}</strong></div>` +
+    (latestAnalysis.angles||[]).slice(0,4).map(a => `
+      <div style="padding:var(--space-3);background:var(--color-surface-offset);border-radius:var(--radius-md);margin-bottom:var(--space-2)">
+        <div style="font-weight:700;font-size:var(--text-sm);color:var(--color-primary);margin-bottom:var(--space-1)">${escHtml(a.title)}</div>
+        <div style="font-size:var(--text-xs);color:var(--color-text-muted)">${escHtml(a.description)}</div>
+      </div>
+    `).join('');
+  }
+}
+
+function updateKPIs() {
+  animateCount('kpi-profili', state.profiles.length);
+  animateCount('kpi-posts', state.posts.length);
+  animateCount('kpi-analisi', state.analyses.length);
+  animateCount('kpi-reports', state.reports.length);
+  const lastScrape = state.scrapeHistory[0];
+  if (lastScrape) {
+    document.getElementById('kpi-posts-sub').textContent = `Ultimo: ${fmtDate(lastScrape.date)}`;
+  }
+}
+
+function animateCount(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const start = parseInt(el.textContent.replace(/\D/g,'')) || 0;
+  if (start === target) return;
+  const steps = 20, dur = 400;
+  let step = 0;
+  const interval = setInterval(() => {
+    step++;
+    el.textContent = Math.round(start + (target - start) * (step / steps));
+    if (step >= steps) { el.textContent = target; clearInterval(interval); }
+  }, dur / steps);
+}
+
+// --- UTILS ---
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+function fmtDateFile() {
+  return new Date().toISOString().slice(0,10);
+}
+function fmt(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n/1000).toFixed(1) + 'K';
+  return String(n);
+}
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function escAttr(s) { return String(s||'').replace(/"/g,'&quot;'); }
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function downloadText(text, filename, mime) {
+  const blob = new Blob([text], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function refreshAll() {
+  renderProfiles();
+  renderPosts();
+  renderAnalysisList();
+  renderScrapeHistory();
+  renderDashboard();
+  updateFilterSelects();
+  refreshReportPage();
+  renderTovList();
+}
+
+// --- INIT ---
+async function init() {
+  try {
+    await initDB();
+    await loadState();
+    refreshAll();
+    lucide.createIcons();
+    toast('FinSpy pronto. Configura le API Key per iniziare.', 'info', 4000);
+  } catch(err) {
+    console.error('Init error:', err);
+    // Fallback to in-memory only
+    lucide.createIcons();
+    toast('Database locale non disponibile. I dati non persisteranno.', 'warning', 5000);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
